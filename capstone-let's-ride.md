@@ -1,8 +1,8 @@
-# Capstone: Group Run
+# Capstone: Let's Ride
 
 ## Problem Statement
 
-Running clubs across the world host **group runs** that are open to the public. Group runs range from an impromptu weekend run around the lake to a formal event (generate interest in the club, say thank you to friends, family, and sponsors, celebrate an occasion, etc). The important thing is that anyone can join a group run. You don't have to be a running club member.
+Cycling groups across the world host **group rides** that are open to the public. Group rides range from an impromptu weekend run around the lake to a formal event (generate interest in the club, say thank you to friends, family, and sponsors, celebrate an occasion, etc). The important thing is that anyone can join a group run. You don't have to be a running club member.
 
 Group run discovery is difficult. Some running clubs post a message on their home page. Others post on social media. Still others don't post anything at all and hope that word-of-mouth will spread the message. When clubs do post a message, it's usually not on a formal calendar or easy to find on a map. It's not clear if the run has already occurred.
 
@@ -23,15 +23,15 @@ Kelsey isn't a member of a running club, he's not ready for that commitment, but
 ## Vocabulary
 
 <dl>
-<dt>Running Club</dt>
+<dt>Cycling Club</dt>
 <dd>An organization based on a shared love of running. Clubs have members. They host runs. Some are informal with infrequent runs. Others are large, have budgets, and charge membership fees.</dd>
-<dt>Runner</dt>
+<dt>Rider</dt>
 <dd>Anyone who signs up for a run. Runners can be members of a club, but don't have to be. All members are runners but not all runners are members.</dd>
 <dt>Member</dt>
 <dd>A runner who is formally affiliated with a running club. A runner can be a member of more than one club.</dd>
 <dt>Club Admin</dt>
 <dd>A running club member with an administrator role. They have more privileges in the Group Run application. All admins are members, but not all members are admins.</dd>
-<dt>Run</dt>
+<dt>Ride</dt>
 <dd>A running event with a specific time, date, and location. A run may also include a route (stretch goal).</dd>
 </dl>
 
@@ -42,7 +42,7 @@ Kelsey isn't a member of a running club, he's not ready for that commitment, but
 3. React UI
 4. Sensible layering and pattern choices
 5. A full test suite that covers the domain and data layers
-6. Deployment to AWS using EC2 or Lambda and RDS.
+6. Deployment to AWS using EC2.
 
 ### Security Requirements
 
@@ -137,7 +137,7 @@ Once a runner finds a run they're interested in, they can sign up.
 
 **Post-condition**: Runner is registered for the run.
 
-### Apply for Membership (Optional)
+### Apply for Membership 
 
 If a runner enjoys a club's runs, they may wish to join the club. Give them an easy way to apply for membership.
 
@@ -145,7 +145,7 @@ If a runner enjoys a club's runs, they may wish to join the club. Give them an e
 
 **Post-condition**: Membership is in a pending status waiting for ADMIN approval.
 
-### Approve a Membership (Optional)
+### Approve a Membership 
 
 Through an administrative UI, the ADMIN user finds pending memberships for their club. They can choose to accept or reject the membership application.
 
@@ -153,34 +153,25 @@ Through an administrative UI, the ADMIN user finds pending memberships for their
 
 **Post-condition**: Data is not deleted. The membership is set to a rejected status. This prevents the runner from applying again and again.
 
-## Tips and Hints
+## Notes
 
 - A Runner can be a Member of many Clubs.
 - A Runner can be a Club Admin for one and only one Club.
 - Runs are always associated to a Club. 
-- It's also a good idea to associate a Run to the Member who created it.
 - Any Runner can sign up for any Run as long as it's not at capacity. Members aren't limited to Runs sponsored by their Clubs.
 - Runners cannot create Runs. Only Members (and therefore Admins) can create Runs.
-- It's okay to use domain models for security. A Runner with a Member record may qualify as having the MEMBER role. Add a boolean field, `is_admin`, to the Member record and you have a Club ADMIN. (Careful that a Runner is never an Admin for two Clubs.) It's also fine to use separate user and role tables. Weigh your options. Make a plan.
-- MapBox is a very effective stretch goal for this project. You can use it to browse Runs near a location on a map, chart a Run route, or choose a location for a Run.
+- 
+## Technical Learning Goals
 
-## Technical Learning Goal Candidates
-
-- Maps integration: MapBox (no credit card required for free tier) or Google Maps (credit card required for free tier, though it will never be charged without your explicit permission)
-- Alternative data storage: PostgreSQL, MongoDB, Neo4j
+- Google Maps
+- Strava API
 - A third-party calendar UI
-
-Don't feel limited by the list. The technical learning goal is your decision, pending instructor approval.
 
 ## Deployment
 
-Unless altered by a learning goal (and maybe not even then), applications must be deployed to AWS.
-
 - use RDS for persistent data storage
-- use EC2 or Lambda for the API
-- use EC2 or Lambda for the front-end application
-
-Presentation demos must use the AWS deployment.
+- use EC2 for the API
+- use EC2 for the front-end application
 
 ## Approach
 
