@@ -1,0 +1,5 @@
+dev10\room13\App.class
+dev10\room13\models\Rider.class
+dev10\room13\service\RiderService.class
+dev10\room13\controller\RiderController.class
+dev10\room13\data\IRiderRepository.class
