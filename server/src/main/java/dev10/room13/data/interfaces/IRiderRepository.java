@@ -4,15 +4,8 @@ import java.util.List;
 
 import dev10.room13.models.Rider;
 
-public interface IRiderRepository {
+import org.springframework.data.repository.CrudRepository;
 
-    List<Rider> findAllRiders();
+public interface IRiderRepository extends CrudRepository<Rider, Integer> {
 
-    Rider findRiderById(int id);
-
-    Rider add(Rider rider);
-
-    boolean update(Rider rider);
-
-    boolean deleteById(int id);
 }
