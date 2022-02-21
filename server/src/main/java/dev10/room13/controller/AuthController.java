@@ -33,9 +33,10 @@ public class AuthController {
         this.riderDetailsService = riderDetailsService;
     }
 
-    @PostMapping("api/sign_up")
+    @PostMapping("api/signup")
     public ResponseEntity<?> createAccount(@RequestBody Map<String, String> credentials) {
         Rider rider = new Rider();
+
 
         try {
             String username = credentials.get("username");
@@ -50,8 +51,6 @@ public class AuthController {
         } catch (DuplicateKeyException ex) {
             return new ResponseEntity<>(List.of("The provided username already exists"), HttpStatus.BAD_REQUEST);
         }
-
-        // happy path...
 
         HashMap<String, Integer> map = new HashMap<>();
         map.put("riderId", rider.getRiderId());

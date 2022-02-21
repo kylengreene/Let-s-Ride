@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,7 +38,7 @@ public class Rider implements UserDetails {
     private String riderLastname;
     private String riderPostal;
     private String username;
-    private String password;
+    @JsonIgnore private String password;
     private boolean isDisabled;
 
     @Transient

@@ -65,8 +65,9 @@ public class RiderDetailsService implements UserDetailsService {
         if (username.length() > 50) {
             throw new ValidationException("username must be less than 50 characters");
         }
-
-        if (loadUserByUsername(username) != null) throw new ValidationException("username already exists");
+        if (riderRepository.findByUsername(username).isPresent()) {
+            throw new ValidationException("Username already exists");
+        }
     }
 
     private void validatePassword(String password) {
