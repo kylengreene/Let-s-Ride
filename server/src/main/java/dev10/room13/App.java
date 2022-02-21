@@ -1,13 +1,13 @@
 package dev10.room13;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
-    }
+@SpringBootApplication
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class App {
+  public static void main(String[] args) {
+    SpringApplication.run(App.class, args);
+  }
+
 }
