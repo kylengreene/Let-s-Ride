@@ -24,30 +24,18 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 
-function createData(name, calories, fat, carbs, protein) {
+function createData(clubName, clubDescription, clubPostalCode, clubMembershipFee ) {
   return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
+    clubName,
+    clubDescription,
+    clubPostalCode,
+    clubMembershipFee,
   };
 }
 
 const rows = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),
+  createData('Minneapolis Cycling Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non tellus orci ac auctor augue mauris. Magna fermentum iaculis eu non diam phasellus vestibulum lorem. Tincidunt ornare massa eget egestas purus. Quis blandit turpis cursus in hac habitasse platea dictumst.', 55408, 35),
+  createData('St.Paul Cycling Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non tellus orci ac auctor augue mauris. Magna fermentum iaculis eu non diam phasellus vestibulum lorem. Tincidunt ornare massa eget egestas purus. Quis blandit turpis cursus in hac habitasse platea dictumst.', 55101, 25)
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -82,35 +70,30 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'name',
+    id: 'clubName',
     numeric: false,
     disablePadding: true,
-    label: 'Dessert (100g serving)',
+    label: 'Club',
   },
   {
-    id: 'calories',
+    id: 'clubDescription',
     numeric: true,
     disablePadding: false,
-    label: 'Calories',
+    label: 'Description',
   },
   {
-    id: 'fat',
+    id: 'clubPostalCode',
     numeric: true,
     disablePadding: false,
-    label: 'Fat (g)',
+    label: 'Postal Code',
   },
   {
-    id: 'carbs',
+    id: 'clubMembershipFee',
     numeric: true,
     disablePadding: false,
-    label: 'Carbs (g)',
+    label: 'Monthly Membership Fee ($)',
   },
-  {
-    id: 'protein',
-    numeric: true,
-    disablePadding: false,
-    label: 'Protein (g)',
-  },
+
 ];
 
 function EnhancedTableHead(props) {
@@ -226,7 +209,7 @@ EnhancedTableToolbar.propTypes = {
 
 const ClubPage = () => {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [orderBy, setOrderBy] = React.useState('clubMembershipFee');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -240,19 +223,19 @@ const ClubPage = () => {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.clubName);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, clubName) => {
+    const selectedIndex = selected.indexOf(clubName);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, clubName);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -280,7 +263,7 @@ const ClubPage = () => {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (clubName) => selected.indexOf(clubName) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -310,17 +293,17 @@ const ClubPage = () => {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.clubName);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.clubName)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.clubName}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -338,11 +321,11 @@ const ClubPage = () => {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {row.clubName}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
+                      <TableCell align="right">{row.clubDescription}</TableCell>
+                      <TableCell align="right">{row.clubPostalCode}</TableCell>
+                      <TableCell align="right">{row.clubMembershipFee}</TableCell>
                       <TableCell align="right">{row.protein}</TableCell>
                     </TableRow>
                   );

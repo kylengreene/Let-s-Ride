@@ -17,6 +17,40 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { withRouter } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { useEffect, useState } from "react";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import { TextField } from '@material-ui/core';
+
+const subTypes = [
+  "BREAK",
+  "Baby",
+  "Basic",
+  "EX",
+  "GX",
+  "Goldenrod Game Corner",
+  "Item",
+  "LEGEND",
+  "Level-Up",
+  "MEGA",
+  "Pokémon Tool",
+  "Pokémon Tool F",
+  "Rapid Strike",
+  "Restored",
+  "Rocket's Secret Machine",
+  "Single Strike",
+  "Special",
+  "Stadium",
+  "Stage 1",
+  "Stage 2",
+  "Supporter",
+  "TAG TEAM",
+  "Technical Machine",
+  "V",
+  "VMAX",
+];
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -59,6 +93,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const NavBar = () => {
+  const [selectedSubType, setSelectedSubType] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -181,11 +216,33 @@ const NavBar = () => {
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
+              
             </SearchIconWrapper>
+            
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
             />
+          </Search>
+          <Search>
+          <FormControl>
+            {/* <FormLabel id="filter-menu">Filter By:</FormLabel> */}
+            <TextField
+              id="outlined-select-field"
+              select
+              label="Select"
+              name="FilterOne"
+              value={selectedSubType}
+              onChange={console.log("change")}
+              helperText="Please select desired Sub Type"
+            >
+              {subTypes.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+          </FormControl>
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
