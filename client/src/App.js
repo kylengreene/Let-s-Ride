@@ -11,6 +11,7 @@ import HomePage from "./components/HomePage";
 import AccountProfile from "./components/AccountProfile";
 import SignUp from "./components/SignUp";
 import ClubAdminPage from "./components/ClubAdminPage";
+import Calender from "./components/Calender";
 
 function App() {
   return (
@@ -29,6 +30,9 @@ function App() {
           </Route>
           <Route path="/admin" exact>
             <ClubAdminPage />
+          </Route>
+          <Route path="/calender" exact>
+            <Calender />
           </Route>
         </Switch>
       </Router>
