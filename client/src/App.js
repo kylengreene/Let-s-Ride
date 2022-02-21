@@ -39,6 +39,7 @@ function App() {
           </Route>
           <Route path="/search" exact>
             <SearchForm />
+            </Route>
           <Route path="/calender" exact>
             <Calender />
           </Route>
