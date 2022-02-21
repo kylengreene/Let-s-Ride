@@ -1,13 +1,17 @@
 package dev10.room13.models;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
+
+import org.springframework.lang.NonNull;
 
 import lombok.Data;
 
@@ -17,16 +21,20 @@ import lombok.Data;
 public class Club {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int clubId;
+
+    @NonNull
     private String clubName;
     private String clubDescription;
     private String clubPostalCode;
     private BigDecimal clubMembershipFee;
-    private List<Ride> clubRides = new ArrayList<>();
-    private List<Member> clubMembers = new ArrayList<>();
-    private List<Admin> clubAdmins = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "clubs")
+    private List<Rider> riders;
+
+    @OneToMany(mappedBy = "club")
+    private List<Ride> rides;
 
     public Club() {}
 
