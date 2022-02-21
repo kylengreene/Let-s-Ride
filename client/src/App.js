@@ -13,6 +13,8 @@ import SignUp from "./components/SignUp";
 import ClubAdminPage from "./components/ClubAdminPage";
 import ClubPage from "./components/ClubPage";
 import SearchForm from "./components/SearchForm";
+import Calender from "./components/Calender";
+
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
           </Route>
           <Route path="/search" exact>
             <SearchForm />
+          <Route path="/calender" exact>
+            <Calender />
           </Route>
         </Switch>
       </Router>
