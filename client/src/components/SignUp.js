@@ -95,10 +95,11 @@ const SignUp =()=> {
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  name="postal-code"
+                  label="Postal Code"
+                  type="postal-code"
+                  id="riderPostal"
+                  autoComplete="postal-code"
                 />
               </Grid>
               <Grid item xs={12}>

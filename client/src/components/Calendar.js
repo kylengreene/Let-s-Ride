@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom"
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 
-function Calender() {
+function Calendar() {
   const userEvents = [
     { description: 'event 1', date: '2022-02-01T16:30', test: 'ignore this' },
     { description: 'event 2', date: '2022-02-02T12:30', test: 'ignore this too' },
@@ -24,7 +24,7 @@ function Calender() {
   }
 }
 
-export default withRouter(Calender);
+export default withRouter(Calendar);
 
 // { title: 'event 1', date: '2022-02-01' },
 //     { title: 'event 2', date: '2022-02-02' },

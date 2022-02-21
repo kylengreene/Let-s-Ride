@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { withRouter } from "react-router-dom"
+import { withRouter, useHistory, history, push } from "react-router-dom"
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
@@ -23,6 +23,7 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import { Button } from "@mui/material";
 
 function createData(clubName, clubDescription, clubPostalCode, clubMembershipFee ) {
   return {
@@ -214,7 +215,9 @@ const ClubPage = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+   
+  let history = useHistory();
+   
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -260,8 +263,13 @@ const ClubPage = () => {
   };
 
   const handleChangeDense = (event) => {
+    
     setDense(event.target.checked);
   };
+  function handleViewClub (props) {
+    console.log("view club click");
+    history.push(`/calender`);
+  }
 
   const isSelected = (clubName) => selected.indexOf(clubName) !== -1;
 
@@ -353,7 +361,11 @@ const ClubPage = () => {
         />
       </Paper>
       <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
+        control={<Button onClick={handleViewClub} />}
+        label="View Club"
+      />
+      <FormControlLabel
+        control={<Switch checked={dense} onChange={() =>handleChangeDense()} />}
         label="Dense padding"
       />
     </Box>
