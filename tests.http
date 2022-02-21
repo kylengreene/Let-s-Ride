@@ -1,0 +1,47 @@
+GET http://localhost:8080/api/clubs/1/riders HTTP/1.1
+Content-Type: application/json
+
+###
+
+PUT api/clubs/ HTTP/1.1
+Host: localhost:8080
+Content-Type: text/uri-list
+Content-Length: 28
+
+http://localhost:8080/club/2
+
+###
+
+PUT http://localhost:8080/api/clubs/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJsZXRzLXJpZGUiLCJzdWIiOiJ0ZXN0IiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiZXhwIjoxNjQ1NDY2NTM1fQ.OK4htlVT7jo1c1ED84zfhLgLjG-Ap4miigRb9JySJsw
+
+{
+    "clubName": "jpaClub3",
+    "clubDescription": "descdesc",
+    "clubPostalCode": "70737",
+    "clubMembershipFee": 12.0
+}
+
+###
+
+POST http://localhost:8080/api/auth HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "jkesle",
+    "password": "@jEk7532!"
+}
+
+###
+
+POST http://localhost:8080/api/signup HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "newUsername",
+    "password": "@Josh2468",
+    "firstname": "joshua",
+    "lastname": "kesler",
+    "postal": "70737"
+}
