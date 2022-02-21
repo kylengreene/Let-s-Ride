@@ -11,6 +11,8 @@ import HomePage from "./components/HomePage";
 import AccountProfile from "./components/AccountProfile";
 import SignUp from "./components/SignUp";
 import ClubAdminPage from "./components/ClubAdminPage";
+import ClubPage from "./components/ClubPage";
+import SearchForm from "./components/SearchForm";
 
 function App() {
   return (
@@ -29,6 +31,12 @@ function App() {
           </Route>
           <Route path="/admin" exact>
             <ClubAdminPage />
+          </Route>
+          <Route path="/club" exact>
+            <ClubPage />
+          </Route>
+          <Route path="/search" exact>
+            <SearchForm />
           </Route>
         </Switch>
       </Router>
