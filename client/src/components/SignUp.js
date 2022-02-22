@@ -13,7 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {createRider} from "../api/signup.js";
+import {createRider} from "../api/rider-api";
 
 function Copyright(props) {
   return (
