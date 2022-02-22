@@ -1,0 +1,15 @@
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\data\RiderRepository.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\models\Role.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\security\SecurityConfig.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\data\ClubRepository.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\models\Club.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\security\JwtConverter.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\models\Rider.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\service\RiderService.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\data\RideRepository.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\models\Ride.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\controller\AuthController.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\data\RoleRepository.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\security\RiderDetailsService.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\App.java
+C:\Users\Kyle Greene\Documents\Dev10\Let-s-Ride\server\src\main\java\dev10\room13\security\JwtRequestFilter.java

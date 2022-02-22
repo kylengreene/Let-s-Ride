@@ -2,13 +2,15 @@ drop database if exists lets_ride;
 create database lets_ride;
 use lets_ride;
 
+
 create table rider (
 rider_id int auto_increment primary key not null,
 rider_firstname varchar(100) not null,
 rider_lastname varchar(100) not null,
 rider_postal char(5) not null,
 username varchar(50) not null unique,
-password varchar(1000) not null
+password varchar(1000) not null,
+is_disabled boolean not null
 );
 
 create table `role` (
@@ -57,3 +59,5 @@ rider_id int not null,
 foreign key (ride_id) references ride(ride_id),
 foreign key (rider_id) references rider(rider_id)
 );
+
+INSERT INTO role (`name`) VALUES ("USER");
