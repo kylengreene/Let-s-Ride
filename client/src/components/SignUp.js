@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {createRider} from "../api/signup.js";
 
 function Copyright(props) {
   return (
@@ -34,10 +35,15 @@ const SignUp =()=> {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    let rider = {
+      "firstname": data.get("firstName"),
+      "lastname": data.get("lastName"),
+      "postal": data.get("email"),
+      "username": data.get("username"),
+      "password": data.get("password")
+    };
+
+    console.log(createRider(rider));
   };
 
   return (
