@@ -38,7 +38,7 @@ const SignUp =()=> {
     let rider = {
       "firstname": data.get("firstName"),
       "lastname": data.get("lastName"),
-      "postal": data.get("email"),
+      "postal": data.get("postal-code"),
       "username": data.get("username"),
       "password": data.get("password")
     };
