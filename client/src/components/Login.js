@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { withRouter, useHistory } from "react-router-dom"
+import { withRouter, useHistory } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,7 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {createRider} from "../api/signup.js";
+import {login} from "../api/login.js";
 
 function Copyright(props) {
   return (
@@ -30,7 +30,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-const SignUp =()=> {
+const Login =()=> {
 
   const history = useHistory();
 
@@ -40,16 +40,14 @@ const SignUp =()=> {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    let rider = {
-      "firstname": data.get("firstName"),
-      "lastname": data.get("lastName"),
-      "postal": data.get("postal-code"),
+    let user = {
       "username": data.get("username"),
       "password": data.get("password")
     };
-    createRider(rider);
 
-    history.push("/login");
+    console.log(login(user));
+
+    history.push("/");
   };
 
   return (
@@ -68,31 +66,9 @@ const SignUp =()=> {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Login
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -107,16 +83,6 @@ const SignUp =()=> {
                 <TextField
                   required
                   fullWidth
-                  id="postal-code"
-                  label="Postal "
-                  name="postal-code"
-                  autoComplete="postal-code"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
                   name="password"
                   label="Password"
                   type="password"
@@ -124,25 +90,18 @@ const SignUp =()=> {
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
-            </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              Login
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/login" variant="body2">
-                  Already have an account? Sign in
+                <Link href="/signup" variant="body2">
+                  Don't have an account? Sign up
                 </Link>
               </Grid>
             </Grid>
@@ -153,4 +112,4 @@ const SignUp =()=> {
     </ThemeProvider>
   );
 };
-export default withRouter(SignUp);
+export default withRouter(Login);
