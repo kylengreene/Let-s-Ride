@@ -107,9 +107,10 @@ const SignUp =()=> {
                 <TextField
                   required
                   fullWidth
-                  id="postal-code"
-                  label="Postal "
                   name="postal-code"
+                  label="Postal Code"
+                  type="postal-code"
+                  id="riderPostal"
                   autoComplete="postal-code"
                 />
               </Grid>

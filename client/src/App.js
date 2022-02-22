@@ -5,6 +5,7 @@ import {
   Switch,
   Route,
   Redirect,
+  useParams
 } from "react-router-dom";
 import NavBar from "./components/NavBar.js";
 import HomePage from "./components/HomePage";
@@ -13,8 +14,9 @@ import SignUp from "./components/SignUp";
 import ClubAdminPage from "./components/ClubAdminPage";
 import ClubPage from "./components/ClubPage";
 import SearchForm from "./components/SearchForm";
-import Calender from "./components/Calender";
 import Login from "./components/Login";
+import Calendar from "./components/Calendar";
+import ClubDetailPage from "./components/ClubDetailPage";
 
 
 function App() {
@@ -41,16 +43,20 @@ function App() {
           <Route path="/club" exact>
             <ClubPage />
           </Route>
+          <Route path ="/club/:id"exact>
+            <ClubDetailPage/>
+          </Route>
           <Route path="/search" exact>
             <SearchForm />
             </Route>
-          <Route path="/calender" exact>
-            <Calender />
+          <Route path="/calendar" exact>
+            <Calendar />
           </Route>
         </Switch>
       </Router>
     </div>
   );
 }
+
 
 export default App;
