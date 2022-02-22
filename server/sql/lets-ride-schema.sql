@@ -20,7 +20,7 @@ create table rider_role (
 rider_id int not null,
 role_id int not null,
 foreign key (rider_id) references rider(rider_id),
-foreign key (role_id) references `role`(role_id) 
+foreign key (role_id) references `role`(role_id)
 );
 
 create table club (
