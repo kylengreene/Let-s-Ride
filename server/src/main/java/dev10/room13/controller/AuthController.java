@@ -61,6 +61,7 @@ public class AuthController {
     }
 
     @PostMapping("api/auth")
+    @CrossOrigin
     public ResponseEntity<Map<String, String>> authenticate(@RequestBody Map<String, String> credentials) {
 
         UsernamePasswordAuthenticationToken authToken =

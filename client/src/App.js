@@ -14,6 +14,7 @@ import SignUp from "./components/SignUp";
 import ClubAdminPage from "./components/ClubAdminPage";
 import ClubPage from "./components/ClubPage";
 import SearchForm from "./components/SearchForm";
+import Login from "./components/Login";
 import Calendar from "./components/Calendar";
 import ClubDetailPage from "./components/ClubDetailPage";
 
@@ -32,6 +33,9 @@ function App() {
           </Route>
           <Route path="/signup" exact>
             <SignUp />
+          </Route>
+          <Route path="/login" exact>
+            <Login />
           </Route>
           <Route path="/admin" exact>
             <ClubAdminPage />
