@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { withRouter } from "react-router-dom"
+import { withRouter } from "react-router-dom";
 
 function ClubAdminPage (){
     return(
