@@ -29,11 +29,13 @@ export async function retriveRider(id) {
             "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`
         }
     }
-    const response = await fetch(`${baseUrl}/${id}`, init);
+    const response = await fetch(`${baseUrl}/riders/${id}`, init);
     if (response.status === 200) {
+        console.log(response);
         return response.json();
     } else if (response.status === 403) {
         return Promise.reject(403);
     }
     return Promise.reject("Could not retrive rider.");
+    
 }
