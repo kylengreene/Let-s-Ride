@@ -15,13 +15,14 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useEffect, useState } from "react";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { TextField } from '@material-ui/core';
+import AuthContext from "../context/AuthContext";
 
 const subTypes = [
   "BREAK",
@@ -93,6 +94,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const NavBar = () => {
+
+  const authContext = React.useContext(AuthContext);
+
   const [selectedSubType, setSelectedSubType] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -118,6 +122,10 @@ const NavBar = () => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const routeToAccount = () => {
+
+  }
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -135,8 +143,6 @@ const NavBar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
 
@@ -177,18 +183,21 @@ const NavBar = () => {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <Link to="/account" style={{color: '#424242', textDecoration: 'none'}}>
+      <MenuItem >
         <IconButton
           size="large"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
           color="inherit"
+          style={{color: "#212121"}}
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        Profile
       </MenuItem>
+      </Link>
     </Menu>
   );
 
@@ -216,9 +225,9 @@ const NavBar = () => {
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
-              
+
             </SearchIconWrapper>
-            
+
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
@@ -260,17 +269,18 @@ const NavBar = () => {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+            <Link to="/account">
             <IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <AccountCircle style={{color: 'white'}}/>
             </IconButton>
+            </Link>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
