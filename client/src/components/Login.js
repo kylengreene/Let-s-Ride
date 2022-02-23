@@ -14,6 +14,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {login} from "../api/login.js";
+import {useContext, useState} from 'react';
+import AuthContext from '../context/AuthContext.js';
 
 function Copyright(props) {
   return (
@@ -30,25 +32,30 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-const Login =()=> {
+const Login = () => {
+  const [candidate, setCandidate] = useState({
+    username: "",
+    password: ""
+});
+const [hasError, setHasError] = useState(false);
 
-  const history = useHistory();
+const history = useHistory();
+const authContext = useContext(AuthContext);
 
+const onChange = (event) => {
+    const clone = { ...candidate };
+    clone[event.target.name] = event.target.value;
+    setCandidate(clone);
+}
 
-
-  const handleSubmit = async (event) => {
+const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    let user = {
-      "username": data.get("username"),
-      "password": data.get("password")
-    };
-
-    console.log(login(user));
-
-    history.push("/");
-  };
+    login(candidate)
+        .then(principal => {
+            authContext.login(principal);
+            history.push("/");
+        }).catch(() => setHasError(true));
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -77,6 +84,8 @@ const Login =()=> {
                   label="User Name"
                   name="username"
                   autoComplete="username"
+                  value={candidate.username}
+                  onChange={onChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -88,6 +97,8 @@ const Login =()=> {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={candidate.password}
+                  onChange={onChange}
                 />
               </Grid>
             <Button
