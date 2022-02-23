@@ -17,12 +17,35 @@ import SearchForm from "./components/SearchForm";
 import Login from "./components/Login";
 import Calendar from "./components/Calendar";
 import ClubDetailPage from "./components/ClubDetailPage";
+import {useState, useEffect} from 'react';
+import AuthContext from "./context/AuthContext";
+import {logout, refresh, login} from "./api/login";
 
 
 function App() {
+
+  const [credentials, setCredentials] = useState();
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    refresh()
+      .then(principal => setCredentials(principal))
+      .catch(() => setCredentials())
+      .finally(() => setInitialized(true));
+  }, [])
+
+  const auth = {
+    credentials,
+    login: (principal) => setCredentials(principal),
+    logout: () => {
+      logout().finally(() => setCredentials());
+    }
+  };
+
   return (
     <div className="App">
       <Router>
+      <AuthContext.Provider value={auth}>
         <NavBar />
         <Switch>
           <Route path="/" exact>
@@ -53,6 +76,7 @@ function App() {
             <Calendar />
           </Route>
         </Switch>
+        </AuthContext.Provider>
       </Router>
     </div>
   );

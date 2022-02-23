@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,18 +38,20 @@ public class Rider implements UserDetails {
     private String riderFirstname;
     private String riderLastname;
     private String riderPostal;
-    private String username;
+    @JsonIgnore private String username;
     @JsonIgnore private String password;
-    private boolean isDisabled;
+    @JsonIgnore private boolean isDisabled;
 
     @Transient
     private List<GrantedAuthority> authorities;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "rider_role",
       joinColumns = @JoinColumn(name = "rider_id"),
       inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
+
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "rider_club",
@@ -77,36 +80,45 @@ public class Rider implements UserDetails {
   }
 
     public static List<Role> convertAuthoritiesToRoles(Collection<GrantedAuthority> authorities) {
-      return authorities.stream()
-              .map(a -> {
+        return authorities.stream()
+            .map(a -> {
                 Role role = new Role();
                 role.setName(a.getAuthority().substring(5));
                 return role;
-              })
-              .collect(Collectors.toList());
-  }
+            })
+            .collect(Collectors.toList());
+    }
 
 
+
+
+
+
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
       return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
       return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
       return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
       return !isDisabled;
     }
 
+    @JsonIgnore
     @Override
     public List<GrantedAuthority> getAuthorities() {
       List<GrantedAuthority> list = convertRolesToAuthorities(this.roles);

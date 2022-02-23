@@ -3,6 +3,7 @@ package dev10.room13.models;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
