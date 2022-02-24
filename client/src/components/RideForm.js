@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from "react";
 import { withRouter, useHistory } from "react-router-dom"
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -11,7 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import MenuItem from '@mui/material/MenuItem';
+import states from 'states-us';
 
 function RideForm() {
   function Copyright(props) {
@@ -35,7 +37,11 @@ function RideForm() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     let ride = {
-      "rideLocation": data.get("location"),
+      "rideAddress1": data.get("addressLine1"),
+      "rideAddress2": data.get("addressLine2"),
+      "rideCity": data.get("city"),
+      "ridePostalCode": data.get("postal"),
+      "rideState": usaState,
       "rideDateTime": data.get("date"),
       "rideDescription": data.get("description"),
       "rideLimit": data.get("limit")
@@ -45,6 +51,13 @@ function RideForm() {
 
     history.push("/rideform");
   };
+
+  const [usaState, setUsaState] = useState("");
+
+  const handleChange = (event) => {
+    setUsaState(event.target.value);
+  };
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -68,6 +81,7 @@ function RideForm() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
+
                   required
                   fullWidth
                   id="addressLine1"
@@ -85,6 +99,50 @@ function RideForm() {
                   name="addressLine2"
 
                 />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+
+                  required
+                  fullWidth
+                  id="city"
+                  label="City"
+                  name="city"
+
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+
+                  required
+                  fullWidth
+                  type="number"
+                  id="postal-code"
+                  label="Postal Code"
+                  name="postal"
+
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+
+                  required
+                  select
+                  fullWidth
+                  id="state"
+                  label="State"
+                  value={usaState}
+                  onChange={handleChange}
+
+                  >
+
+                  {states.filter((x) => x.contiguous).map((option) => (
+                  <MenuItem key={option.name} value={option.name}>
+                  {option.name}
+
+                </MenuItem>
+          ))}
+                  </TextField>
               </Grid>
               <Grid item xs={12}>
                 <TextField

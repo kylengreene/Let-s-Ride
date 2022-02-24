@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { withRouter, useHistory } from "react-router-dom"
+import { useEffect, useState, useContext, useCallback } from "react";
+import { withRouter, useHistory, useParams } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,9 +12,40 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { findById, saveClubData } from "../api/club";
+import AuthContext from "../context/AuthContext";
 
+const clubTest = {
+  clubName: "",
+  clubDescription: "",
+  clubPostalCode: "",
+  clubMembershipFee: ""
+};
 
 function ClubForm() {
+
+  const [ club, setClub ] = useState(clubTest);
+  const { clubId } = useParams();
+  const theme = createTheme();
+  const history = useHistory();
+  const authContext = useContext(AuthContext);
+
+  const handleErr = useCallback(err => {
+    if (err === 403) {
+      authContext.logout();
+      err = "Unauthorized";
+    }
+    history.push("/error", err.toString())
+  }, [authContext, history]);
+
+  useEffect(() => {
+      if (clubId) {
+          findById(clubId)
+              .then(result => setClub(result))
+              .catch(handleErr);
+      }
+  }, [clubId, history, handleErr]);
+
   function Copyright(props) {
     return (
       <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -27,23 +59,19 @@ function ClubForm() {
     );
   }
 
-  const theme = createTheme();
-
-  const history = useHistory();
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    let club = {
+    let clubData = {
       "clubName": data.get("clubName"),
       "clubDescription": data.get("description"),
       "clubPostalCode": data.get("postal-code"),
       "clubMembershipFee": data.get("membership-fee")
     };
-    console.log(club);
-    //createClub(club);
-
-    history.push("/clubform");
+    console.log(clubData);
+    saveClubData(clubData)
+        .then(() => history.push("/"))
+        .catch(handleErr);
   };
 
   return (
@@ -62,7 +90,7 @@ function ClubForm() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Create Club 
+            {club.clubId ? "Update" : "Create"} Club 
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -73,6 +101,7 @@ function ClubForm() {
                   id="clubName"
                   label="Club Name"
                   name="clubName"
+                  defaultValue={club.clubName}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -80,6 +109,7 @@ function ClubForm() {
                   name="description"
                   id="description"
                   label="Description"
+                  defaultValue={club.clubDescription}
                   fullWidth
                   multiline
                   rows={4}
@@ -94,6 +124,7 @@ function ClubForm() {
                   label="Postal Code"
                   id="clubPostal"
                   autoComplete="postal-code"
+                  defaultValue={club.clubPostalCode}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -107,6 +138,7 @@ function ClubForm() {
                   InputProps={{
                     startAdornment: "$"
                   }}
+                  defaultValue={club.clubMembershipFee}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -117,7 +149,7 @@ function ClubForm() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2}}
                 >
-                Create Club
+                  {club.clubId ? "Update" : "Create"}
                 </Button>
             </Grid>
             <Grid item xs={12} sm={6}>
