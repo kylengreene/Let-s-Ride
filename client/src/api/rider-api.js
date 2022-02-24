@@ -21,7 +21,9 @@ export async function createRider(rider) {
     return Promise.reject({ status: response.status });
 }
 
-export async function retriveRider(id) {
+
+
+export async function retrieveRider(username) {
     const init = {
         method: "GET",
         headers: {
@@ -29,13 +31,32 @@ export async function retriveRider(id) {
             "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`
         }
     }
-    const response = await fetch(`${baseUrl}/riders/${id}`, init);
+    const response = await fetch(`${baseUrl}/riders/search/user?username=${username}`, init)
     if (response.status === 200) {
-        console.log(response);
-        return response.json();
+        let data = await response.json();
+        let clubData = await getClubsForRider(data);
+        data.clubs = clubData;
+        return data;
+
     } else if (response.status === 403) {
         return Promise.reject(403);
     }
-    return Promise.reject("Could not retrive rider.");
-    
+    return Promise.reject("Could not retrieve rider.");
+
+}
+
+async function getClubsForRider(data) {
+    const init = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`
+        }
+    }
+    const resp = await fetch(data["_links"].clubs.href, init);
+    if (resp.status === 200) {
+        const response = await resp.json();
+        const clubData = response["_embedded"].clubs;
+        return clubData;
+    }
 }

@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react";
 import { render } from "@testing-library/react";
-import { withRouter } from "react-router-dom"
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
+import { withRouter } from "react-router-dom";
+import FullCalendar from '@fullcalendar/react'; // must go before plugins
+import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 
 function Calendar() {
   const userEvents = [

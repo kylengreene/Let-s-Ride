@@ -13,6 +13,8 @@ import AccountProfile from "./components/AccountProfile";
 import SignUp from "./components/SignUp";
 import ClubAdminPage from "./components/ClubAdminPage";
 import ClubPage from "./components/ClubPage";
+import ClubForm from "./components/ClubForm";
+import RideForm from "./components/RideForm";
 import SearchForm from "./components/SearchForm";
 import Login from "./components/Login";
 import Calendar from "./components/Calendar";
@@ -57,12 +59,18 @@ function App() {
           <Route path="/signup" exact>
             <SignUp />
           </Route>
-          <Route path="/login" exact>
-            <Login />
+          <Route path="/clubform" exact>
+            <ClubForm />
+          </Route>
+          <Route path="/rideform" exact>
+            <RideForm />
           </Route>
           <Route path="/admin" exact>
             <ClubAdminPage />
           </Route>
+          <Route path="/login" exact>
+            <Login />
+            </Route>
           <Route path="/club" exact>
             <ClubPage />
           </Route>

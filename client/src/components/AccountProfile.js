@@ -6,7 +6,8 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { Button, Container } from "@mui/material";
-import { retriveRider } from "../api/rider-api";
+import { retrieveRider } from "../api/rider-api";
+import AuthContext from "../context/AuthContext"
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -17,6 +18,10 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function AccountProfile() {
+
+  const authContext = React.useContext(AuthContext);
+
+
   return (
       <Container>
     <Box sx={{ flexGrow: 1, m: 4, mx: "auto" }} maxWidth="md">
@@ -38,7 +43,7 @@ function AccountProfile() {
         </Grid>
       </Grid>
     </Box>
-    <Button onClick = {() => retriveRider(1)}>fetch</Button>
+    <Button onClick = {() => retrieveRider(authContext.credentials.username)}>fetch</Button>
     </Container>
   );
 }
