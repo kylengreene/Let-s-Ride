@@ -14,6 +14,8 @@ public class RepositoryConfig implements RepositoryRestConfigurer {
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         config.exposeIdsFor(Rider.class, Club.class);
+        config.returnBodyOnCreate("application/json");
+        config.returnBodyOnUpdate("application/json");
     }
 
 }

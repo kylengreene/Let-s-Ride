@@ -39,7 +39,7 @@ export async function saveClubData(club) {
 
 async function update(club) {
 
-    const init = { method: "PUT", headers: {
+    const init = { method: "PATCH", headers: {
         "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
         "Content-Type": "application/json",
         "Accept": "application/json"
@@ -48,12 +48,12 @@ async function update(club) {
     };
 
     const response = await fetch(`${baseUrl}/clubs/${club.clubID}`, init);
-    if (response.status === 204) {
+    if (response.status === 200) {
         return response.json();
-    } else if (response.status === 403) {
-        return Promise.reject(403);
+    } else if (response.status === 404) {
+        return Promise.reject("Club does not exist");
     }
-    return Promise.reject("Could not fetch club.");
+    return Promise.reject("Club ID's cannot be changed");
 }
 
 async function add(club) {
