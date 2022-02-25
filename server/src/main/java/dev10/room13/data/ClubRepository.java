@@ -18,7 +18,6 @@ public interface ClubRepository extends JpaRepository<Club, Integer> {
     List<Club> findAllByClubPostalCode(String clubPostalCode);
 
     @Override
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     Club save(Club entity);
 
 }

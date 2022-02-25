@@ -28,7 +28,6 @@ import lombok.ToString;
 
 @Entity
 @Data
-@ToString(exclude = "password")
 public class Rider implements UserDetails {
 
     @Id
@@ -39,7 +38,7 @@ public class Rider implements UserDetails {
     private String riderLastname;
     private String riderPostal;
     @JsonIgnore private String username;
-    @JsonIgnore private String password;
+    @JsonIgnore @ToString.Exclude private String password;
     @JsonIgnore private boolean isDisabled;
 
     @Transient
@@ -50,6 +49,7 @@ public class Rider implements UserDetails {
     @JoinTable(name = "rider_role",
       joinColumns = @JoinColumn(name = "rider_id"),
       inverseJoinColumns = @JoinColumn(name = "role_id"))
+      @ToString.Exclude
     private List<Role> roles;
 
 
@@ -57,6 +57,7 @@ public class Rider implements UserDetails {
     @JoinTable(name = "rider_club",
       joinColumns = @JoinColumn(name = "rider_id"),
       inverseJoinColumns = @JoinColumn(name = "club_id"))
+      @ToString.Exclude
     private List<Club> clubs;
 
     public Rider(){};

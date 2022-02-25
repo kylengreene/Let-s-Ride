@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.validation.ValidationException;
 
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 import dev10.room13.models.Rider;
 import dev10.room13.security.JwtConverter;
 import dev10.room13.security.RiderDetailsService;
+import dev10.room13.security.SecurityConfig;
 
+@Import(SecurityConfig.class)
 @RestController
 public class AuthController {
     private final AuthenticationManager authenticationManager;
@@ -72,6 +77,8 @@ public class AuthController {
 
             if (authentication.isAuthenticated()) {
                 String jwtToken = converter.getTokenFromUser((Rider) authentication.getPrincipal());
+               SecurityContextHolder.getContext().setAuthentication(authentication);
+
 
                 HashMap<String, String> map = new HashMap<>();
                 map.put("jwt_token", jwtToken);

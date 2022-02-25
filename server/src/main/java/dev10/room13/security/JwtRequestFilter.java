@@ -37,8 +37,6 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
             } else {
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         user.getUsername(), null, user.getAuthorities());
-
-                SecurityContextHolder.getContext().setAuthentication(token);
             }
         }
 
