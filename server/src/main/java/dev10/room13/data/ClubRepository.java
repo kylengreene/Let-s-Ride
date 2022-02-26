@@ -14,10 +14,10 @@ import dev10.room13.models.Club;
 public interface ClubRepository extends JpaRepository<Club, Integer> {
 
     @RestResource(path = "name", rel="name")
-    Club findByClubName(String clubName);
+    Club findByClubName(String clubName);  // api/clubs/search/name?clubName={clubName}
 
     @RestResource(path="postal", rel="postal")
-    List<Club> findAllByClubPostalCode(String clubPostalCode);
+    List<Club> findAllByClubPostalCode(String clubPostalCode); // api/clubs/search/name?clubName={clubName}
 
     @Override
     @PreAuthorize("hasAuthority('ROLE_USER')")

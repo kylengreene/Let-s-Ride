@@ -29,7 +29,7 @@ import lombok.ToString;
  * model for the Rider entity
  *
  * @apiNote designed to be used in conjunction with JPA/Spring Data REST
- *@author Joshua Kesler
+ *
  */
 @Entity
 @Data
