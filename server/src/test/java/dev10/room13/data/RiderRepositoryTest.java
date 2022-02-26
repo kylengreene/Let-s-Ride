@@ -25,17 +25,16 @@ public class RiderRepositoryTest {
     @Autowired private EntityManager entityManager;
     @Autowired private RiderRepository riderRepository;
 
-    private Rider testRider;
+    public static Rider testRider;
 
     RiderRepositoryTest() {
-        Rider testRider = new Rider();
+        testRider = new Rider();
         testRider.setRiderFirstname("TEST");
         testRider.setRiderLastname("TEST");
         testRider.setRiderPostal("22222");
         testRider.setUsername("USERNAME");
         testRider.setDisabled(false);
         testRider.setPassword("Password"); //this will be stored as a hash in production database
-        this.testRider = testRider;
     }
 
     @BeforeEach
@@ -67,15 +66,15 @@ public class RiderRepositoryTest {
 
     @Test
     void savesNewRider() {
-        Rider added = riderRepository.save(this.testRider);
+        Rider added = riderRepository.save(testRider);
         assertTrue(added.getRiderId() == 6);
     }
 
     @Test
     void updatesExistingRider() {
-        this.testRider.setRiderId(1);
-        this.testRider.setRiderFirstname("Changed");
-        Rider updated = riderRepository.save(this.testRider);
+        testRider.setRiderId(1);
+        testRider.setRiderFirstname("Changed");
+        Rider updated = riderRepository.save(testRider);
         assertTrue(updated.getRiderId() == 1);
         assertTrue(riderRepository.findAll().size() == 5);
     }

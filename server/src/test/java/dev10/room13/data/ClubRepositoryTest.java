@@ -28,15 +28,14 @@ public class ClubRepositoryTest {
     @Autowired private EntityManager entityManager;
     @Autowired private ClubRepository clubRepository;
 
-    private Club testClub;
+    public static Club testClub;
 
     ClubRepositoryTest() {
-        Club testClub = new Club();
+        testClub = new Club();
         testClub.setClubName("CLUB5");
         testClub.setClubDescription("test club5");
         testClub.setClubPostalCode("99999");
         testClub.setClubMembershipFee(new BigDecimal(12));
-        this.testClub = testClub;
     }
 
 
@@ -70,15 +69,15 @@ public class ClubRepositoryTest {
 
     @Test
     void savesNewClub() {
-        Club added = clubRepository.save(this.testClub);
+        Club added = clubRepository.save(testClub);
         assertTrue(added.getClubId() == 5);
     }
 
     @Test
     void updatesExistingClub() {
-        this.testClub.setClubId(1);
-        this.testClub.setClubName("Changed");
-        Club updated = clubRepository.save(this.testClub);
+        testClub.setClubId(1);
+        testClub.setClubName("Changed");
+        Club updated = clubRepository.save(testClub);
         assertTrue(updated.getClubId() == 1);
         assertTrue(clubRepository.findAll().size() == 4);
     }

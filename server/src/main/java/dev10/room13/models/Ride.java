@@ -20,13 +20,13 @@ import lombok.Data;
 public class Ride {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int rideId;
     private Long routeId;
     private Timestamp rideDatetime;
     private String rideLocation;
     private String rideDescription;
-    private int rideLimit;
+    private Integer rideLimit;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "rider_id")
