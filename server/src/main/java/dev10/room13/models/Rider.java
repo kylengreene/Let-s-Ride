@@ -25,7 +25,12 @@ import org.springframework.util.Assert;
 
 import lombok.Data;
 import lombok.ToString;
-
+/**
+ * model for the Rider entity
+ *
+ * @apiNote designed to be used in conjunction with JPA/Spring Data REST
+ *@author Joshua Kesler
+ */
 @Entity
 @Data
 public class Rider implements UserDetails {
@@ -69,6 +74,11 @@ public class Rider implements UserDetails {
       this.authorities = convertRolesToAuthorities(roles);
     }
 
+
+    /**
+     * @param roles  used by {@code getAuthorities}
+     * @return List<GrantedAuthority>  the authorities from corresponding roles i.e., role: "USER", authority: "ROLE_USER"
+     */
     public static List<GrantedAuthority> convertRolesToAuthorities(List<Role> roles) {
       List<GrantedAuthority> authorities = new ArrayList<>(roles.size());
       for (Role role : roles) {
@@ -80,6 +90,12 @@ public class Rider implements UserDetails {
       return authorities;
   }
 
+
+    /**
+     * @param authorities  {@code List<GrantedAuthority>}
+     *
+     * @return List<Role> authorities formatted into role syntax i.e., removal of the "ROLE_" prefix
+     */
     public static List<Role> convertAuthoritiesToRoles(Collection<GrantedAuthority> authorities) {
         return authorities.stream()
             .map(a -> {
@@ -95,30 +111,53 @@ public class Rider implements UserDetails {
 
 
 
+
+    /**
+     *
+     * {@return boolean} for the scope of v1 of this project, alwaus {@code true}
+     */
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
       return true;
     }
 
+
+    /**
+     * {@return boolean}  for the scope of v1 of this project, always {@code true}
+     */
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
       return true;
     }
 
+
+    /**
+     * {@return boolean}  for the scope of v1 of this project, always {@code true}
+     */
     @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
       return true;
     }
 
+
+    /**
+     * {@return boolean}  for the scope of v1 of this project, always {@code true}
+     */
     @JsonIgnore
     @Override
     public boolean isEnabled() {
       return !isDisabled;
     }
 
+
+    /**
+     * not a getter in the traditional sense. called by
+     *
+     * {@return List<GrantedAuthority> list}
+     */
     @JsonIgnore
     @Override
     public List<GrantedAuthority> getAuthorities() {

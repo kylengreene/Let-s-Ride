@@ -10,7 +10,11 @@ import javax.persistence.ManyToMany;
 
 import lombok.Data;
 import lombok.ToString;
-
+/**
+ * model for the Role entity
+ *
+ * @apiNote designed to be used in conjunction with JPA/Spring Data REST
+ */
 @Entity
 @Data
 public class Role {

@@ -60,4 +60,3 @@ foreign key (ride_id) references ride(ride_id),
 foreign key (rider_id) references rider(rider_id)
 );
 
-INSERT INTO role (`name`) VALUES ("USER");

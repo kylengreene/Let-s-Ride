@@ -10,7 +10,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.Data;
-
+/**
+ * model for the Ride entity
+ *
+ * @apiNote designed to be used in conjunction with JPA/Spring Data REST
+ */
 @Entity
 @Data
 public class Ride {
