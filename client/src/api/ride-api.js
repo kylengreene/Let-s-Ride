@@ -94,7 +94,7 @@ export async function deleteRide(rideId) {
     if (response.status === 204) {
         return response.json();
     } else if (response.status === 403) {
-        return Promise.reject("only Admins can delete resources");
+        return response.reject("only Admins can delete resources");
     }
     return Promise.reject("Resource does not exist")
 }

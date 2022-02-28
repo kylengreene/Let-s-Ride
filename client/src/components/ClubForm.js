@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { findById, saveClubData } from "../api/club";
+import { findClubById, saveClubData } from "../api/club";
 import AuthContext from "../context/AuthContext";
 
 const emptyClub = {
@@ -26,14 +26,14 @@ function ClubForm() {
 
   const [ club, setClub ] = useState(emptyClub);
   const { clubId } = useParams();
-  const [ errors, setErrors ] = useState({});
+  const [ errors, setErrors ] = useState(emptyClub);
   const theme = createTheme();
   const history = useHistory();
   const authContext = useContext(AuthContext);
 
   const validate = () => {
     let temp = {}
-    temp.clubName = club.clubName ? "" : "This field is required."
+    temp.clubName = club.clubName !== "" ? "" : "This field is required."
     temp.clubDescription = club.clubDescription ? "" : "This field is required."
     temp.clubPostalCode = club.clubPostalCode.length === 5 ? "" : "This field is required."
     temp.clubMembershipFee = club.clubMembershipFee ? "" : ""
@@ -51,7 +51,7 @@ function ClubForm() {
 
   useEffect(() => {
       if (clubId) {
-          findById(clubId)
+        findClubById(clubId)
               .then(result => setClub(result))
               .catch(handleErr);
       }
@@ -70,21 +70,25 @@ function ClubForm() {
     );
   }
 
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setClub({
+      ...club, 
+      [name]: value
+    })
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (validate()){
-      const data = new FormData(event.currentTarget);
-      let clubData = {
-        "clubName": data.get("clubName"),
-        "clubDescription": data.get("description"),
-        "clubPostalCode": data.get("postal-code"),
-        "clubMembershipFee": data.get("membership-fee")
-      };
-      console.log(clubData);
-      saveClubData(clubData)
-          .then(() => history.push("/"))
-          .catch(handleErr);
-    }
+    if(validate()) {
+      console.log("Success!");
+    } 
+
+    console.log(errors);
+      
+    // saveClubData(club)
+    //   .then(() => history.push("/"))
+    //   .catch(handleErr);
   };
 
   return (
@@ -113,22 +117,24 @@ function ClubForm() {
                   fullWidth
                   label="Club Name"
                   name="clubName"
-                  defaultValue={club.clubName}
-                  error
-                  helperText="Value required"
+                  value={club.clubName}
+                  onChange={handleChange}
+                  error={Boolean(errors?.clubName)}
+                  helperText={(errors?.clubName)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  name="description"
+                  name="clubDescription"
                   id="description"
                   label="Description"
-                  defaultValue={club.clubDescription}
+                  value={club.clubDescription}
+                  onChange={handleChange}
+                  error={Boolean(errors?.clubDescription)}
+                  helperText={(errors?.clubDescription)}
                   fullWidth
                   multiline
                   rows={4}
-                  error
-                  helperText="Value required"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -136,27 +142,30 @@ function ClubForm() {
                   type="number"
                   required
                   fullWidth
-                  name="postal-code"
+                  name="clubPostalCode"
                   label="Postal Code"
                   id="clubPostal"
                   autoComplete="postal-code"
-                  defaultValue={club.clubPostalCode}
-                  error
-                  helperText="Value required"
+                  value={club.clubPostalCode}
+                  onChange={handleChange}
+                  error={Boolean(errors?.clubPostalCode)}
+                  helperText={(errors?.clubPostalCode)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   type="number"
-                  required
                   fullWidth
-                  name="membership-fee"
+                  name="clubMembershipFee"
                   label="Membership Fee"
                   id="membershipFee"
                   InputProps={{
                     startAdornment: "$"
                   }}
-                  defaultValue={club.clubMembershipFee}
+                  value={club.clubMembershipFee}
+                  onChange={handleChange}
+                  error={Boolean(errors?.clubMembershipFee)}
+                  helperText={(errors?.clubMembershipFee)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>

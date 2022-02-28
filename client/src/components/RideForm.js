@@ -46,7 +46,7 @@ function RideForm() {
 
   useEffect(() => {
       if (rideId) {
-          findRideById(rideId)
+        findRideById(rideId)
               .then(result => setRide(result))
               .catch(handleErr);
       }
