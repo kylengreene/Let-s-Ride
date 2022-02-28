@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { findById, saveClubData } from "../api/club";
 import AuthContext from "../context/AuthContext";
 
-const clubTest = {
+const emptyClub = {
   clubName: "",
   clubDescription: "",
   clubPostalCode: "",
@@ -24,11 +24,22 @@ const clubTest = {
 
 function ClubForm() {
 
-  const [ club, setClub ] = useState(clubTest);
+  const [ club, setClub ] = useState(emptyClub);
   const { clubId } = useParams();
+  const [ errors, setErrors ] = useState({});
   const theme = createTheme();
   const history = useHistory();
   const authContext = useContext(AuthContext);
+
+  const validate = () => {
+    let temp = {}
+    temp.clubName = club.clubName ? "" : "This field is required."
+    temp.clubDescription = club.clubDescription ? "" : "This field is required."
+    temp.clubPostalCode = club.clubPostalCode.length === 5 ? "" : "This field is required."
+    temp.clubMembershipFee = club.clubMembershipFee ? "" : ""
+    setErrors({...temp})
+    return Object.values(temp).every(x => x == "")
+  }
 
   const handleErr = useCallback(err => {
     if (err === 403) {
@@ -61,17 +72,19 @@ function ClubForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    let clubData = {
-      "clubName": data.get("clubName"),
-      "clubDescription": data.get("description"),
-      "clubPostalCode": data.get("postal-code"),
-      "clubMembershipFee": data.get("membership-fee")
-    };
-    console.log(clubData);
-    saveClubData(clubData)
-        .then(() => history.push("/"))
-        .catch(handleErr);
+    if (validate()){
+      const data = new FormData(event.currentTarget);
+      let clubData = {
+        "clubName": data.get("clubName"),
+        "clubDescription": data.get("description"),
+        "clubPostalCode": data.get("postal-code"),
+        "clubMembershipFee": data.get("membership-fee")
+      };
+      console.log(clubData);
+      saveClubData(clubData)
+          .then(() => history.push("/"))
+          .catch(handleErr);
+    }
   };
 
   return (
@@ -92,16 +105,17 @@ function ClubForm() {
           <Typography component="h1" variant="h5">
             {club.clubId ? "Update" : "Create"} Club 
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt:3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="clubName"
                   label="Club Name"
                   name="clubName"
                   defaultValue={club.clubName}
+                  error
+                  helperText="Value required"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -113,6 +127,8 @@ function ClubForm() {
                   fullWidth
                   multiline
                   rows={4}
+                  error
+                  helperText="Value required"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -125,6 +141,8 @@ function ClubForm() {
                   id="clubPostal"
                   autoComplete="postal-code"
                   defaultValue={club.clubPostalCode}
+                  error
+                  helperText="Value required"
                 />
               </Grid>
               <Grid item xs={12}>

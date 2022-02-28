@@ -19,6 +19,7 @@ import SearchForm from "./components/SearchForm";
 import Login from "./components/Login";
 import Calendar from "./components/Calendar";
 import ClubDetailPage from "./components/ClubDetailPage";
+import RideDetailPage from "./components/RideDetailPage";
 import {useState, useEffect} from 'react';
 import AuthContext from "./context/AuthContext";
 import {logout, refresh, login} from "./api/login";
@@ -76,6 +77,9 @@ function App() {
           </Route>
           <Route path ="/club/:id"exact>
             <ClubDetailPage/>
+          </Route>
+          <Route path ="/ride"exact>
+            <RideDetailPage/>
           </Route>
           <Route path="/search" exact>
             <SearchForm />
