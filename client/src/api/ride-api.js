@@ -38,7 +38,7 @@ export async function findRideById(rideId) {
 }
 
 export async function saveRideData(ride) {
-    return ride.id > 0 ? update(ride) : add(ride);
+    return ride.id > 0 ? updateRide(ride) : addRide(ride);
 }
 
 async function updateRide(ride) {
@@ -51,7 +51,7 @@ async function updateRide(ride) {
         body: JSON.stringify(ride)
     };
 
-    const response = await fetch(`${baseUrl}/clubs/${club.rideId}`, init);
+    const response = await fetch(`${baseUrl}/clubs/${ride.rideId}`, init);
     if (response.status === 200) {
         return response.json();
     } else if (response.status === 404) {
@@ -90,7 +90,7 @@ export async function deleteRide(rideId) {
     if (response.status === 204) {
         return response.json();
     } else if (response.status === 403) {
-        return promise.reject("only Admins can delete resources");
+        return response.reject("only Admins can delete resources");
     }
     return Promise.reject("Resource does not exist")
 }

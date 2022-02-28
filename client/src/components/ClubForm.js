@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { findById, saveClubData } from "../api/club";
+import { findClubById, saveClubData } from "../api/club";
 import AuthContext from "../context/AuthContext";
 
 const emptyClub = {
@@ -51,7 +51,7 @@ function ClubForm() {
 
   useEffect(() => {
       if (clubId) {
-          findById(clubId)
+        findClubById(clubId)
               .then(result => setClub(result))
               .catch(handleErr);
       }
