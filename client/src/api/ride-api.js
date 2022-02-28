@@ -27,11 +27,13 @@ export async function findById(rideId) {
     }};
 
     const response = await fetch(`${baseUrl}/rides/${rideId}`, init);
+
     if (response.status === 200) {
         return response.json();
     } else if (response.status === 403) {
         return Promise.reject(403);
     }
+
     return Promise.reject("Could not find ride.");
 }
 
@@ -92,3 +94,4 @@ export async function deleteRide(rideId) {
     }
     return Promise.reject("Resource does not exist")
 }
+

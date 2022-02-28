@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useEffect, useState } from "react";
-import { withRouter, useHistory } from "react-router-dom"
+import { useEffect, useState, useContext, useCallback } from "react";
+import { withRouter, useHistory, useParams } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,9 +13,45 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
+import { findById, saveRideData } from "../api/ride-api";
+import AuthContext from "../context/AuthContext";
 import states from 'states-us';
 
+const emptyRide = {
+  rideAddress1: "",
+  rideAddress2: "",
+  rideCity: "",
+  ridePostalCode: "",
+  rideState: "",
+  rideDateTime: "",
+  rideDescription: "",
+  rideLimit: ""
+};
+
 function RideForm() {
+
+  const [ ride, setRide ] = useState(emptyRide);
+  const { rideId } = useParams();
+  const theme = createTheme();
+  const history = useHistory();
+  const authContext = useContext(AuthContext);
+
+  const handleErr = useCallback(err => {
+    if (err === 403) {
+      authContext.logout();
+      err = "Unauthorized";
+    }
+    history.push("/error", err.toString())
+  }, [authContext, history]);
+
+  useEffect(() => {
+      if (rideId) {
+          findById(rideId)
+              .then(result => setRide(result))
+              .catch(handleErr);
+      }
+  }, [rideId, history, handleErr]);
+
   function Copyright(props) {
     return (
       <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -29,14 +65,10 @@ function RideForm() {
     );
   }
 
-  const theme = createTheme();
-
-  const history = useHistory();
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    let ride = {
+    let rideData = {
       "rideAddress1": data.get("addressLine1"),
       "rideAddress2": data.get("addressLine2"),
       "rideCity": data.get("city"),
@@ -46,10 +78,10 @@ function RideForm() {
       "rideDescription": data.get("description"),
       "rideLimit": data.get("limit")
     };
-    console.log(ride);
-    //createRide(ride);
-
-    history.push("/rideform");
+    console.log(rideData);
+    saveRideData(rideData)
+        .then(() => history.push("/"))
+        .catch(handleErr);
   };
 
   const [usaState, setUsaState] = useState("");

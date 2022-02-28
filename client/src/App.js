@@ -19,6 +19,7 @@ import SearchForm from "./components/SearchForm";
 import Login from "./components/Login";
 import Calendar from "./components/Calendar";
 import ClubDetailPage from "./components/ClubDetailPage";
+import RideDetailPage from "./components/RideDetailPage";
 import Map from "./components/Google-Maps/mapDisplay";
 import GeoCoding from "./components/Google-Maps/GeoCoding";
 import {useState, useEffect} from 'react';
@@ -78,6 +79,9 @@ function App() {
           </Route>
           <Route path ="/club/:id"exact>
             <ClubDetailPage/>
+          </Route>
+          <Route path ="/ride"exact>
+            <RideDetailPage/>
           </Route>
           <Route path="/search" exact>
             <SearchForm />
