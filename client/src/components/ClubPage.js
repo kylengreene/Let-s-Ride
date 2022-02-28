@@ -34,10 +34,21 @@ function createData(clubName, clubDescription, clubPostalCode, clubMembershipFee
   };
 }
 
+
 const rows = [
-  createData('Minneapolis Cycling Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non tellus orci ac auctor augue mauris. Magna fermentum iaculis eu non diam phasellus vestibulum lorem. Tincidunt ornare massa eget egestas purus. Quis blandit turpis cursus in hac habitasse platea dictumst.', 55408, 35),
-  createData('St.Paul Cycling Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non tellus orci ac auctor augue mauris. Magna fermentum iaculis eu non diam phasellus vestibulum lorem. Tincidunt ornare massa eget egestas purus. Quis blandit turpis cursus in hac habitasse platea dictumst.', 55101, 25)
-];
+  {
+  clubName:'Minneapolis Cycling Club',
+    clubDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non tellus orci ac auctor augue mauris. Magna fermentum iaculis eu non diam phasellus vestibulum lorem. Tincidunt ornare massa eget egestas purus. Quis blandit turpis cursus in hac habitasse platea dictumst.',
+    clubPostalCode:55408,
+    clubMembershipFee: 35
+  },
+  {
+  clubName:'St.Paul Cycling Club',
+  clubDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non tellus orci ac auctor augue mauris. Magna fermentum iaculis eu non diam phasellus vestibulum lorem. Tincidunt ornare massa eget egestas purus. Quis blandit turpis cursus in hac habitasse platea dictumst.',
+  clubPostalCode:55101,
+  clubMembershipFee: 25
+  }
+  ];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -55,8 +66,7 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
+
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -251,6 +261,7 @@ const ClubPage = () => {
     }
 
     setSelected(newSelected);
+    console.log("selected club", newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -267,8 +278,7 @@ const ClubPage = () => {
     setDense(event.target.checked);
   };
   function handleViewClub (props) {
-    console.log("view club click");
-    history.push(`/calender`);
+    history.push(`/club/${selected}`);
   }
 
   const isSelected = (clubName) => selected.indexOf(clubName) !== -1;
@@ -334,7 +344,6 @@ const ClubPage = () => {
                       <TableCell align="right">{row.clubDescription}</TableCell>
                       <TableCell align="right">{row.clubPostalCode}</TableCell>
                       <TableCell align="right">{row.clubMembershipFee}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
                     </TableRow>
                   );
                 })}
