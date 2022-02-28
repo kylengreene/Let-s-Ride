@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
-import { findById, saveRideData } from "../api/ride-api";
+import { findRideById, saveRideData } from "../api/ride-api";
 import AuthContext from "../context/AuthContext";
 import states from 'states-us';
 
@@ -46,7 +46,7 @@ function RideForm() {
 
   useEffect(() => {
       if (rideId) {
-          findById(rideId)
+          findRideById(rideId)
               .then(result => setRide(result))
               .catch(handleErr);
       }
@@ -107,7 +107,7 @@ function RideForm() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Create Ride 
+            Create Ride
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>

@@ -11,17 +11,8 @@ function GeoCoding() {
   Geocode.setRegion("us");
   Geocode.setLocationType("ROOFTOP");
   Geocode.enableDebug();
-  function AddressToCoord(address) {
-    Geocode.fromAddress(address).then(
-      (response) => {
-        const { lat, lng } = response.results[0].geometry.location;
-        console.log(lat, lng);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
+
+
   function CoordToAddress() {
     Geocode.fromLatLng("48.8583701", "2.2922926").then(
       (response) => {
@@ -63,6 +54,18 @@ function GeoCoding() {
       <button onClick={() => AddressToCoord("55 Quai Jacques Chirac, 75007 Paris, France")}>Address to Coord</button>
       <button onClick={() => CoordToAddress()}>Coord To Address</button>
     </div>
+  );
+}
+
+export function AddressToCoord(address) {
+  Geocode.fromAddress(address).then(
+    (response) => {
+      const { lat, lng } = response.results[0].geometry.location;
+      console.log(lat, lng);
+    },
+    (error) => {
+      console.error(error);
+    }
   );
 }
 

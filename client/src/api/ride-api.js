@@ -1,7 +1,11 @@
+import {AddressToCoord} from "../components/Google-Maps/GeoCoding";
+
+
 const baseUrl = process.env.REACT_APP_API_URL;
 
 
-export async function findRidesByPostal(ridePostal) {
+export async function findRidesByAddress(address) {
+    const [lat, lng] = AddressToCoord(address).split(",");
     const init = {
         method: "GET",
         headers: {
@@ -10,7 +14,7 @@ export async function findRidesByPostal(ridePostal) {
             "Content-Type": "application/json"
         }
     }
-    const response = await fetch(`${baseUrl}/rides/search/postal?rideLocation=${ridePostal}`, init);
+    const response = await fetch(`${baseUrl}/rides/search/location?lat=${lat}&lng=${lng}`, init);
     if (response.status === 200) {
         return await response.json();
     } else {
@@ -38,7 +42,7 @@ export async function findRideById(rideId) {
 }
 
 export async function saveRideData(ride) {
-    return ride.id > 0 ? update(ride) : add(ride);
+    return ride.id > 0 ? updateRide(ride) : addRide(ride);
 }
 
 async function updateRide(ride) {
@@ -51,7 +55,7 @@ async function updateRide(ride) {
         body: JSON.stringify(ride)
     };
 
-    const response = await fetch(`${baseUrl}/clubs/${club.rideId}`, init);
+    const response = await fetch(`${baseUrl}/clubs/${ride.rideId}`, init);
     if (response.status === 200) {
         return response.json();
     } else if (response.status === 404) {
@@ -90,7 +94,7 @@ export async function deleteRide(rideId) {
     if (response.status === 204) {
         return response.json();
     } else if (response.status === 403) {
-        return promise.reject("only Admins can delete resources");
+        return Promise.reject("only Admins can delete resources");
     }
     return Promise.reject("Resource does not exist")
 }

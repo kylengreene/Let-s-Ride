@@ -94,4 +94,10 @@ public class RideRepositoryTest {
         assertTrue(updated.getRideCreator().getRiderFirstname().equals("Mike"));
 
     }
+
+    @Test
+    void shouldFind2ByCoord() {
+        List<Ride> list = rideRepository.findAllByRideLatAndRideLng(100.00000, 100.00000);
+        assertTrue(list.size() == 2);
+    }
 }
