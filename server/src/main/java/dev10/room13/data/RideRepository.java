@@ -15,9 +15,6 @@ import dev10.room13.models.Ride;
 @RepositoryRestResource(collectionResourceRel = "rides", path = "rides")
 public interface RideRepository extends JpaRepository<Ride, Integer> {
 
-    @RestResource(path = "postal", rel = "postal")
-    List<Ride> findAllByRideLocation(String postal);
-
     @Override
     @PreAuthorize("hasAnyAuthority('ROLE_MEMBER', 'ROLE_ADMIN')")
     Ride save(@Param("ride") Ride entity);

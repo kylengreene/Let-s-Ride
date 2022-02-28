@@ -24,7 +24,8 @@ public class Ride {
     private int rideId;
     private Long routeId;
     private Timestamp rideDatetime;
-    private String rideLocation;
+    private double rideLat;
+    private double rideLng;
     private String rideDescription;
     private Integer rideLimit;
 

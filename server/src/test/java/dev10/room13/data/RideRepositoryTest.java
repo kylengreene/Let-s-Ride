@@ -35,7 +35,8 @@ public class RideRepositoryTest {
         testRide = new Ride();
         testRide.setRideDatetime(Timestamp.from(Instant.now()));
         testRide.setRouteId(1l);
-        testRide.setRideLocation("22222");
+        testRide.setRideLat(90.00000);
+        testRide.setRideLng(-50.11111);
         testRide.setRideDescription("test ride4");
         testRide.setRideLimit(10);
         Club testClub = new Club();
@@ -92,11 +93,5 @@ public class RideRepositoryTest {
         assertTrue(updated.getRideCreator().getRiderId() == 2);
         assertTrue(updated.getRideCreator().getRiderFirstname().equals("Mike"));
 
-    }
-
-    @Test
-    void returnsAllByRideLocation() {
-        List<Ride> list = rideRepository.findAllByRideLocation("22222");
-        assertTrue(list.size() == 2);
     }
 }

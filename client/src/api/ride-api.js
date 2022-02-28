@@ -18,7 +18,7 @@ export async function findRidesByPostal(ridePostal) {
     }
 }
 
-export async function findById(rideId) {
+export async function findRideById(rideId) {
 
     const init = { method: "GET", headers: {
         "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
@@ -38,10 +38,10 @@ export async function findById(rideId) {
 }
 
 export async function saveRideData(ride) {
-    return ride.id > 0 ? update(ride) : add(ride);
+    return ride.id > 0 ? updateRide(ride) : addRide(ride);
 }
 
-async function update(ride) {
+async function updateRide(ride) {
 
     const init = { method: "PATCH", headers: {
         "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
@@ -51,7 +51,7 @@ async function update(ride) {
         body: JSON.stringify(ride)
     };
 
-    const response = await fetch(`${baseUrl}/clubs/${club.rideId}`, init);
+    const response = await fetch(`${baseUrl}/clubs/${ride.rideId}`, init);
     if (response.status === 200) {
         return response.json();
     } else if (response.status === 404) {
@@ -60,7 +60,7 @@ async function update(ride) {
     return Promise.reject("Ride IDs cannot be changed");
 }
 
-async function add(ride) {
+async function addRide(ride) {
     const init = { method: "POST", headers: {
         "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
         "Content-Type": "application/json",
@@ -90,8 +90,7 @@ export async function deleteRide(rideId) {
     if (response.status === 204) {
         return response.json();
     } else if (response.status === 403) {
-        return promise.reject("only Admins can delete resources");
+        return response.reject("only Admins can delete resources");
     }
     return Promise.reject("Resource does not exist")
 }
-
