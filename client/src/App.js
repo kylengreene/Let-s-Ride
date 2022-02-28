@@ -20,6 +20,8 @@ import Login from "./components/Login";
 import Calendar from "./components/Calendar";
 import ClubDetailPage from "./components/ClubDetailPage";
 import RideDetailPage from "./components/RideDetailPage";
+import Map from "./components/Google-Maps/mapDisplay";
+import GeoCoding from "./components/Google-Maps/GeoCoding";
 import {useState, useEffect} from 'react';
 import AuthContext from "./context/AuthContext";
 import {logout, refresh, login} from "./api/login";
@@ -86,6 +88,12 @@ function App() {
             </Route>
           <Route path="/calendar" exact>
             <Calendar />
+          </Route>
+          <Route path="/map" exact>
+            <Map />
+          </Route>
+          <Route path="/geocode" exact>
+            <GeoCoding />
           </Route>
         </Switch>
         </AuthContext.Provider>
