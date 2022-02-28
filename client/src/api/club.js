@@ -16,7 +16,7 @@ export async function findClubsByPostal(clubPostalCode) {
     }
 }
 
-export async function findById(clubId) {
+export async function findClubById(clubId) {
 
     const init = { method: "GET", headers: {
         "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
@@ -37,7 +37,7 @@ export async function saveClubData(club) {
     return club.clubId > 0 ? update(club) : add(club);
 }
 
-async function update(club) {
+async function updateClub(club) {
 
     const init = { method: "PATCH", headers: {
         "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
@@ -56,7 +56,7 @@ async function update(club) {
     return Promise.reject("Club ID's cannot be changed");
 }
 
-async function add(club) {
+async function addClub(club) {
     const init = { method: "POST", headers: {
         "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
         "Content-Type": "application/json",

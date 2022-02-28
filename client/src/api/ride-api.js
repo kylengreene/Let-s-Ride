@@ -18,7 +18,7 @@ export async function findRidesByPostal(ridePostal) {
     }
 }
 
-export async function findById(rideId) {
+export async function findRideById(rideId) {
 
     const init = { method: "GET", headers: {
         "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
@@ -41,7 +41,7 @@ export async function saveRideData(ride) {
     return ride.id > 0 ? update(ride) : add(ride);
 }
 
-async function update(ride) {
+async function updateRide(ride) {
 
     const init = { method: "PATCH", headers: {
         "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
@@ -60,7 +60,7 @@ async function update(ride) {
     return Promise.reject("Ride IDs cannot be changed");
 }
 
-async function add(ride) {
+async function addRide(ride) {
     const init = { method: "POST", headers: {
         "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
         "Content-Type": "application/json",
@@ -94,4 +94,3 @@ export async function deleteRide(rideId) {
     }
     return Promise.reject("Resource does not exist")
 }
-
