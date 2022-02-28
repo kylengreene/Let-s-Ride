@@ -26,6 +26,8 @@ import FormLabel from "@mui/material/FormLabel";
 import { TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { render } from "@testing-library/react";
+import AuthContext from "../context/AuthContext";
+
 
 const subTypes = ["Club Name", "Postal Code"];
 
@@ -69,12 +71,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+
 const NavBar = (props) => {
   const [open, setOpen] = React.useState(false);
   const [filter2, setFilter2] = useState("");
   const [pickUp, setPickUp] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("");
   const [query, setQuery] = useState("");
+  const authContext = React.useContext(AuthContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
@@ -127,10 +131,16 @@ const NavBar = (props) => {
     setOpen(false);
   };
 
+
   const handleOpen = () => {
     setOpen(true);
   };
   const menuId = "primary-search-account-menu";
+
+  const routeToAccount = () => {
+
+  }
+
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -147,10 +157,11 @@ const NavBar = (props) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
+
       <MenuItem name="profile" onClick={handleViewProfile}>
         Profile
       </MenuItem>
-    </Menu>
+
   );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
@@ -190,18 +201,21 @@ const NavBar = (props) => {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <Link to="/account" style={{color: '#424242', textDecoration: 'none'}}>
+      <MenuItem >
         <IconButton
           size="large"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
           color="inherit"
+          style={{color: "#212121"}}
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        Profile
       </MenuItem>
+      </Link>
     </Menu>
   );
 
@@ -229,7 +243,9 @@ const NavBar = (props) => {
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
+
             </SearchIconWrapper>
+
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
@@ -296,17 +312,18 @@ const NavBar = (props) => {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+            <Link to="/account">
             <IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <AccountCircle style={{color: 'white'}}/>
             </IconButton>
+            </Link>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton

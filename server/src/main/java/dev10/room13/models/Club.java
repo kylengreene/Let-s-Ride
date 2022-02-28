@@ -15,7 +15,12 @@ import javax.persistence.OneToMany;
 import org.springframework.lang.NonNull;
 
 import lombok.Data;
-
+import lombok.ToString;
+/**
+ * model for the Club entity
+ *
+ * @apiNote designed to be used in conjuntion with JPA/Spring Data REST
+ */
 
 @Entity
 @Data

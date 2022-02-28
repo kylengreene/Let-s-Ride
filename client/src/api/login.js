@@ -47,6 +47,7 @@ export async function logout() {
     return Promise.resolve();
 }
 
+// TODO: refresh token in AuthController (Josh)
 export async function refresh() {
     const jwt = localStorage.getItem("TOKEN");
     if (!jwt) {

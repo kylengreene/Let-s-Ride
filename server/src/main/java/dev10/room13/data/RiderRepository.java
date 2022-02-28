@@ -17,7 +17,6 @@ import javax.persistence.Transient;
 public interface RiderRepository extends JpaRepository<Rider, Integer> {
 
     @RestResource(path="user", rel="user")
-    @Transient
     Optional<Rider> findByUsername(String username);
 
     @Override
