@@ -16,7 +16,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { Input, InputLabel } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -161,7 +161,7 @@ const NavBar = (props) => {
       <MenuItem name="profile" onClick={handleViewProfile}>
         Profile
       </MenuItem>
-
+</Menu>
   );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
@@ -342,6 +342,6 @@ const NavBar = (props) => {
       {renderMobileMenu}
       {renderMenu}
     </Box>
-  );
+  )
 };
 export default withRouter(NavBar);
