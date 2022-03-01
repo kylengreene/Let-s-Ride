@@ -73,7 +73,7 @@ function ClubForm() {
   const handleChange = (event) => {
     const { name, value } = event.target
     setClub({
-      ...club, 
+      ...club,
       [name]: value
     })
   };
@@ -82,10 +82,10 @@ function ClubForm() {
     event.preventDefault();
     if(validate()) {
       console.log("Success!");
-    } 
+    }
 
     console.log(errors);
-      
+
     // saveClubData(club)
     //   .then(() => history.push("/"))
     //   .catch(handleErr);
@@ -107,7 +107,7 @@ function ClubForm() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            {club.clubId ? "Update" : "Create"} Club 
+            {club.clubId ? "Update" : "Create"} Club
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt:3 }}>
             <Grid container spacing={2}>

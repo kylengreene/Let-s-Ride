@@ -20,7 +20,6 @@ public interface RiderRepository extends JpaRepository<Rider, Integer> {
     Optional<Rider> findByUsername(String username);
 
     @Override
-    @PreAuthorize("hasAuthority('ROLE_USER')")
     Optional<Rider> findById(Integer id);
 
 }

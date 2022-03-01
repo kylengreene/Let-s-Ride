@@ -25,6 +25,7 @@ import GeoCoding from "./components/Google-Maps/GeoCoding";
 import {useState, useEffect} from 'react';
 import AuthContext from "./context/AuthContext";
 import {logout, refresh, login} from "./api/login";
+import TestApiFuncs from "./components/TestApiFuncs";
 
 
 function App() {
@@ -58,6 +59,9 @@ function App() {
           </Route>
           <Route path="/account" exact>
             <AccountProfile />
+          </Route>
+          <Route path="/test">
+            <TestApiFuncs />
           </Route>
           <Route path="/signup" exact>
             <SignUp />

@@ -1,22 +1,21 @@
-import {AddressToCoord} from "../components/Google-Maps/GeoCoding";
+import GeoCoding from "../components/Google-Maps/GeoCoding";
 
-
-const baseUrl = process.env.REACT_APP_API_URL;
+const baseUrl = process.env.REACT_APP_API_URL, geoCode = new GeoCoding();
 
 
 export async function findRidesByAddress(address) {
-    const [lat, lng] = AddressToCoord(address).split(",");
+   const {lat, lng} = await geoCode.AddressToCoord(address);
     const init = {
         method: "GET",
         headers: {
             "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
             "Content-Type": "application/json"
         }
     }
     const response = await fetch(`${baseUrl}/rides/search/location?lat=${lat}&lng=${lng}`, init);
     if (response.status === 200) {
-        return await response.json();
+        let data =  await response.json();
+        console.log(data);
     } else {
         return Promise.reject(response.status);
     }

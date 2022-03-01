@@ -3,6 +3,7 @@ package dev10.room13.models;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -24,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 /**
  * model for the Rider entity
@@ -33,6 +35,7 @@ import lombok.ToString;
  */
 @Entity
 @Data
+@EqualsAndHashCode(exclude = "rsvpRides")
 public class Rider implements UserDetails {
 
     @Id
@@ -56,6 +59,10 @@ public class Rider implements UserDetails {
       inverseJoinColumns = @JoinColumn(name = "role_id"))
       @ToString.Exclude
     private List<Role> roles;
+
+
+    @ManyToMany(mappedBy = "attendees")
+    private Set<Ride> rsvpRides;
 
 
     @ManyToMany(cascade = CascadeType.ALL)
