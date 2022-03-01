@@ -57,8 +57,7 @@ public class ClubRepositoryTest {
         Club actual = clubRepository.findById(1).get();
         assertTrue(actual.getClubId() == 1);
         assertTrue(actual.getClubName().equalsIgnoreCase("CLUB1"));
-        assertTrue(actual.getRiders().size() == 1);
-        assertTrue(actual.getRiders().get(0).getRiderFirstname().equals("Bjarne"));
+        assertTrue(actual.getRiders().size() == 3);
     }
 
     @Test

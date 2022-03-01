@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 import dev10.room13.data.RiderRepository;
 import dev10.room13.data.RoleRepository;
 import dev10.room13.models.Rider;
+import dev10.room13.models.Role;
 
 import javax.validation.ValidationException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 public class RiderDetailsService implements UserDetailsService {
@@ -51,10 +53,13 @@ public class RiderDetailsService implements UserDetailsService {
         rider.setUsername(username);
         rider.setPassword(password);
         rider.setDisabled(false);
-        rider.setRoles(List.of(roleRepository.findById(1).get()));
+        rider = riderRepository.save(rider);
+        Role user = new Role("USER");
+        user.setRider(riderRepository.findById(rider.getRiderId()).get());
+        roleRepository.save(user);
+        rider.setRoles(Set.of(user));
         rider.setAuthorities(Rider.convertRolesToAuthorities(rider.getRoles()));
-
-        return riderRepository.save(rider);
+        return rider;
     }
 
     private void validate(String username) {

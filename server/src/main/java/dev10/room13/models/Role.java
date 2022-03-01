@@ -2,13 +2,19 @@ package dev10.room13.models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 /**
  * model for the Role entity
@@ -17,19 +23,28 @@ import lombok.ToString;
  */
 @Entity
 @Data
+@EqualsAndHashCode(exclude = "rider")
 public class Role {
 
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private int roleId;
-private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
+    private int roleId;
 
-@ManyToMany(mappedBy = "roles")
-private List<Rider> riders;
+    private String name;
 
-public Role(){};
+    @ManyToOne
+    @JoinColumn(name="club_id")
+    private Club club;
 
-public Role(String name){
-    this.name = name;
+    @ManyToOne
+    @JoinColumn(name="rider_id")
+    private Rider rider;
+
+    public Role(){}
+
+    public Role(String name){
+        this.name = name;
     }
+
 }
