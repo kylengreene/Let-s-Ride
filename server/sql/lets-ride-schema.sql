@@ -25,8 +25,8 @@ role_id int primary key auto_increment,
 rider_id int not null,
 club_id int null,
 `name` varchar(50) not null,
-foreign key (club_id) references club(club_id),
-foreign key (rider_id) references rider(rider_id)
+foreign key (club_id) references club(club_id) on delete cascade,
+foreign key (rider_id) references rider(rider_id) on delete cascade
 );
 
 create table ride (
@@ -37,16 +37,18 @@ ride_lat double not null,
 ride_lng double not null,
 ride_description varchar(250) null,
 ride_limit int null,
-rider_id int not null,
+rider_id int null,
 club_id int not null,
-foreign key (rider_id) references rider(rider_id),
-foreign key (club_id) references club(club_id)
+foreign key (rider_id) references rider(rider_id) on delete set null,
+foreign key (club_id) references club(club_id) on delete cascade
 );
 
 create table ride_rider (
 ride_id int not null,
 rider_id int not null,
-foreign key (ride_id) references ride(ride_id),
-foreign key (rider_id) references rider(rider_id)
+foreign key (ride_id) references ride(ride_id) on delete cascade,
+foreign key (rider_id) references rider(rider_id) on delete cascade
 );
+
+
 
