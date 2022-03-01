@@ -12,7 +12,6 @@ import dev10.room13.models.Rider;
 import dev10.room13.models.Role;
 
 import javax.validation.ValidationException;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 

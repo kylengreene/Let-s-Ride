@@ -16,7 +16,8 @@ create table club (
 club_id int auto_increment primary key not null,
 club_name varchar(75) not null unique,
 club_description varchar(250) null,
-club_postal_code char(5) not null,
+club_lat double not null,
+club_lng double not null,
 club_membership_fee double null
 );
 

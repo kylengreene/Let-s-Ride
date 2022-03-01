@@ -40,7 +40,8 @@ public class Club {
     @NonNull
     private String clubName;
     private String clubDescription;
-    private String clubPostalCode;
+    private double clubLat;
+    private double clubLng;
     private BigDecimal clubMembershipFee;
 
     @ManyToMany(mappedBy = "clubs")
