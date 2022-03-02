@@ -6,6 +6,7 @@ import marker from "./Marker";
 import Geocode from "react-geocode";
 
 export default class GeoCoding {
+
   constructor() {
   Geocode.setApiKey("AIzaSyDHYOOmwx5qaEfSTYZG_hfDoEx4pAdWJGE");
   Geocode.setLanguage("en");
@@ -47,4 +48,8 @@ export default class GeoCoding {
         console.log(city, state, country);
         console.log(address);
     }
+   
   }
+
+
+    

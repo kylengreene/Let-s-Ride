@@ -4,7 +4,7 @@ import withRouter from '../../utility/withRouter';
 import GoogleMapReact from "google-map-react";
 import Marker from "./Marker.js";
 
-class mapDisplay extends Component {
+class MapDisplay extends Component {
   state = {
     defaultCenter: {
       lat: 44.9778,
@@ -83,4 +83,4 @@ class mapDisplay extends Component {
     );
   }
 }
-export default withRouter(mapDisplay);
+export default withRouter(MapDisplay);

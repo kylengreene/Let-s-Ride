@@ -26,7 +26,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { Button } from "@mui/material";
 // import { findClubsByAddress } from "../api/club";
-import { findRidesByAddress } from "../api/ride-api"
+// import { findRidesByAddress } from "../api/ride-api"
 import AuthContext from "../context/AuthContext";
 
 function createData(clubName, clubDescription, clubPostalCode, clubMembershipFee ) {
@@ -181,7 +181,7 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          Clubs
         </Typography>
       )}
 
@@ -215,7 +215,21 @@ const ClubPage = (props) => {
 
   const handleViewClub = null;
 
-  const [rows, setRows] = React.useState([]);
+  // const [rows, setRows] = React.useState([]);
+  const rows = [
+    {
+    clubName:'Minneapolis Cycling Club',
+      clubDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non tellus orci ac auctor augue mauris. Magna fermentum iaculis eu non diam phasellus vestibulum lorem. Tincidunt ornare massa eget egestas purus. Quis blandit turpis cursus in hac habitasse platea dictumst.',
+      clubPostalCode:55408,
+      clubMembershipFee: 35
+    },
+    {
+    clubName:'St.Paul Cycling Club',
+    clubDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non tellus orci ac auctor augue mauris. Magna fermentum iaculis eu non diam phasellus vestibulum lorem. Tincidunt ornare massa eget egestas purus. Quis blandit turpis cursus in hac habitasse platea dictumst.',
+    clubPostalCode:55101,
+    clubMembershipFee: 25
+    }
+    ];
 
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('clubMembershipFee');
@@ -225,8 +239,8 @@ const ClubPage = (props) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   // const fetchFunction = props.parameter === "clubs" ? findClubsByAddress : findRidesByAddress;
-  const addressStateFromSearch = router.router.location.state;
-  const address = `${addressStateFromSearch.street}, ${addressStateFromSearch.state} ${addressStateFromSearch.postal}`
+  // const addressStateFromSearch = router.router.location.state;
+  // const address = `${addressStateFromSearch.street}, ${addressStateFromSearch.state} ${addressStateFromSearch.postal}`
 
 
 //    React.useEffect(() => {
