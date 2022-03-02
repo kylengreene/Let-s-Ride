@@ -16,7 +16,8 @@ export default class GeoCoding {
 
   async AddressToCoord(address) {
     const response = await Geocode.fromAddress(address);
-      return response.status === "OK" ? response.results[0].geometry.location : Promise.reject(response.status);
+    const result = await response.json()
+    return response.status === "OK" ? result : Promise.reject(response.status);
 }
 
 

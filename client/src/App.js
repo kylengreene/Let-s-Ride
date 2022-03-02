@@ -59,15 +59,20 @@ function App() {
             <Route path="/account" element={<AccountProfile />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
+
             <Route path="/clubs" >
-              <Route index element={<ClubPage/>} />
+              <Route index element={<ClubPage parameter="clubs" />} />
               <Route path=":id" element={<ClubDetailPage />} >
                 <Route path="admin" element={<ClubAdminPage />} />
               </Route>
               <Route path="new" element={<ClubForm />} />
             </Route>
             <Route path="/rides">
-
+              <Route index element={<ClubPage parameter="rides" />} />
+              <Route path=":id" element={<RideDetailPage />} >
+                <Route path="admin" element={<ClubAdminPage />} />
+              </Route>
+              <Route path="new" element={<RideForm />} />
             </Route>
             <Route path="search">
               <Route path="clubs" element={<SearchForm parameter="clubs" />}/>

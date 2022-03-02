@@ -21,25 +21,25 @@ const Item = styled(Paper)(({ theme }) => ({
 function ClubDetailPage() {
   let { id } = useParams();
 
-  const [club, setClub] = React.useState();
+  const [club, setClub] = React.useState(null);
   const authContext = React.useContext(AuthContext);
   const navigate = useNavigate();
 
   React.useEffect(() => {
     const fetchData = async () => {
-    const response = await findClubById(id);
-    let data = await response.json();
-    setClub(data);
+    const response = await (await findClubById(id)).json();
+    setClub(response);
     }
     fetchData();
-}, [authContext, id]);
+}, [id]);
 
-
+  if (!club) {
+    return <h5>loading</h5>
+  }
 
 
   return (
       <Container>
-        {console.log(club)}
     <Box sx={{ flexGrow: 1, m: 4, mx: "auto" }} maxWidth="md">
       <Grid container spacing={2}>
         <Grid item xs={4} >
@@ -55,7 +55,7 @@ function ClubDetailPage() {
           <Item>xs=4</Item>
         </Grid>
         <Grid item xs={8}>
-          <Item>club desc.</Item>
+          <Item>{}</Item>
         </Grid>
       </Grid>
     </Box>

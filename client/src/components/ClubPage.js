@@ -26,6 +26,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { Button } from "@mui/material";
 import { findClubsByAddress } from "../api/club";
+import { findRidesByAddress } from "../api/ride-api"
+import AuthContext from "../context/AuthContext";
 
 function createData(clubName, clubDescription, clubPostalCode, clubMembershipFee ) {
   return {
@@ -206,8 +208,14 @@ EnhancedTableToolbar.propTypes = {
 
 const ClubPage = (props) => {
 
+  const router = {...props}
+
+  const authContext = React.useContext(AuthContext);
+
 
   const handleViewClub = null;
+
+  const [rows, setRows] = React.useState([]);
 
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('clubMembershipFee');
@@ -216,7 +224,23 @@ const ClubPage = (props) => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  let rows = [];
+  const fetchFunction = props.parameter === "clubs" ? findClubsByAddress : findRidesByAddress;
+  const addressStateFromSearch = router.router.location.state;
+  const address = `${addressStateFromSearch.street}, ${addressStateFromSearch.state} ${addressStateFromSearch.postal}`
+
+
+   React.useEffect(() => {
+     const fetchData = async () => {
+     const response = await fetchFunction(address);
+     setRows(response.json());
+     }
+     fetchData();
+ }, [address, addressStateFromSearch]);
+
+ if (!rows) {
+    return <h5>loading</h5>
+ }
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -276,6 +300,7 @@ const ClubPage = (props) => {
 
   return (
     <Box sx={{ width: '100%' }}>
+      {console.log(rows)}
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>

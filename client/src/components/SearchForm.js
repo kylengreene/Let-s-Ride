@@ -26,13 +26,20 @@ function SearchForm(props) {
   const router = {...props}
 
   const [state, setState] = useState("");
-
   const [street, setStreet] = useState("");
-
   const [postal, setPostal] = useState("");
 
+
+
   const handleSubmit = event => {
-    event.prevenDefault();
+    event.preventDefault();
+    router.router.navigate("/clubs", {
+      state: {
+        street: street,
+        state: state,
+        postal: postal
+      }
+    });
   }
 
   return (
@@ -47,7 +54,7 @@ function SearchForm(props) {
       }}>
 
       <Typography component="h1" variant="h5">
-            {}
+            {props.parameter}
       </Typography>
 
       <Box
@@ -57,6 +64,7 @@ function SearchForm(props) {
         }}
         noValidate
         autoComplete="off"
+        onSubmit={handleSubmit}
       >
         <div>
           <TextField
@@ -100,7 +108,7 @@ function SearchForm(props) {
           </FormControl>
         </div>
         <div>
-          <Button variant="outlined" onSubmit={handleSubmit}>
+          <Button variant="outlined" type="submit">
             {" "}
             Search{" "}
           </Button>

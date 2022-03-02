@@ -2,8 +2,15 @@ import GeoCoding from "../components/Google-Maps/GeoCoding"
 
 const baseUrl = process.env.REACT_APP_API_URL, geoCode = new GeoCoding();
 
-export async function findClubsByAddress(address) {
-    const {lat, lng} = await geoCode.AddressToCoord(address);
+export function findClubsByAddress(address) {
+    geoCode.AddressToCoord(address).then(
+        (response)
+    )
+
+    const geoResponse = await geoCode.AddressToCoord(address);
+    const geoResult  = await geoResponse.json();
+    const {lat, lng} = await geoResult.results[0].geometry.location;
+    console.log(await lat);
      const init = {
          method: "GET",
          headers: {
@@ -13,8 +20,7 @@ export async function findClubsByAddress(address) {
      }
      const response = await fetch(`${baseUrl}/clubs/search/location?lat=${lat}&lng=${lng}`, init);
      if (response.status === 200) {
-         let data =  await response.json();
-         return data;
+         return await response.json();
      } else {
          return Promise.reject(response.status);
      }

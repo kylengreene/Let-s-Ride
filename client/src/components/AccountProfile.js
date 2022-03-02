@@ -21,7 +21,7 @@ function AccountProfile() {
 
   const authContext = React.useContext(AuthContext);
 
-  const [user, setUser] = React.useState({});
+  const [user, setUser] = React.useState(null);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -32,10 +32,13 @@ function AccountProfile() {
     fetchData();
 }, [authContext]);
 
+if (!user) {
+  return <h5>loading</h5>
+}
+
 
   return (
       <Container>
-        {console.log(user)}
     <Box sx={{ flexGrow: 1, m: 4, mx: "auto" }} maxWidth="md">
       <Grid container spacing={2}>
         <Grid item xs={4} >
@@ -45,7 +48,7 @@ function AccountProfile() {
          </Item>
         </Grid>
         <Grid item xs={8}>
-          <Item>xs=4</Item>
+          <Item>{user.riderFirstname}</Item>
         </Grid>
         <Grid item xs={4}>
           <Item>xs=4</Item>
