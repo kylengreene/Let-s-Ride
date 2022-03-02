@@ -54,7 +54,6 @@ class mapDisplay extends Component {
             color="#fec52d"
             onClick={() => {
               this.centerMap(marker.lat, marker.lng);
-              this
             }}
           />
         );

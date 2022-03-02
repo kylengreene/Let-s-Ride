@@ -34,7 +34,7 @@ export async function findClubById(clubId) {
 }
 
 export async function saveClubData(club) {
-    return club.clubId > 0 ? update(club) : add(club);
+    return club.clubId > 0 ? updateClub(club) : addClub(club);
 }
 
 async function updateClub(club) {

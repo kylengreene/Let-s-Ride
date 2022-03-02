@@ -8,12 +8,62 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { findClubById, saveClubData } from "../api/club";
 import AuthContext from "../context/AuthContext";
+import CurrencyFormat from 'react-currency-format';
+
+const CurrencyFormatCustom = React.forwardRef(function CurrencyFormatCustom(props, ref) {
+  const { onChange, ...other } = props;
+
+  return (
+    <CurrencyFormat
+      {...other}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      prefix="$"
+      decimalScale={2}
+      
+      allowNegative={(false)}
+    />
+  );
+});
+
+const NumberFormatCustom = React.forwardRef(function CurrencyFormatCustom(props, ref) {
+  const { onChange, ...other } = props;
+
+  return (
+    <CurrencyFormat
+      {...other}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      decimalScale={0}
+      allowNegative={(false)}
+    />
+  );
+});
+
+CurrencyFormatCustom.propTypes = {
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 const emptyClub = {
   clubName: "",
@@ -33,11 +83,21 @@ function ClubForm() {
 
   const validate = () => {
     let temp = {}
-    temp.clubName = club.clubName !== "" ? "" : "This field is required."
-    temp.clubDescription = club.clubDescription ? "" : "This field is required."
-    temp.clubPostalCode = club.clubPostalCode.length === 5 ? "" : "This field is required."
-    temp.clubMembershipFee = club.clubMembershipFee ? "" : ""
+
+    temp.clubName = (!(club.clubName) ? "This field is required." :
+    club.clubName.length > 50 ? "Club name cannot be greater than 50 characters." : ""); 
+
+    temp.clubDescription = (!(club.clubDescription) ? "This field is required." :
+    club.clubDescription.length > 250 ? "Club description cannot be greater than 250 characters." : "");
+
+    temp.clubPostalCode = (!(club.clubPostalCode) ? "This field is required." : 
+    isNaN(Number(club.clubPostalCode)) ? "Postal code must be 5 digits." :
+    club.clubPostalCode.length === 5 ? "" : "Invalid postal code length.");
+
+    temp.clubMembershipFee = isNaN(Number(club.clubMembershipFee)) ? "Input not a number." : ""
+
     setErrors({...temp})
+    console.log({...temp});
     return Object.values(temp).every(x => x == "")
   }
 
@@ -81,14 +141,11 @@ function ClubForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if(validate()) {
-      console.log("Success!");
+      console.log(club);
+      // saveClubData(club)
+      //   .then(() => history.push("/"))
+      //   .catch(handleErr);
     } 
-
-    console.log(errors);
-      
-    // saveClubData(club)
-    //   .then(() => history.push("/"))
-    //   .catch(handleErr);
   };
 
   return (
@@ -139,7 +196,6 @@ function ClubForm() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  type="number"
                   required
                   fullWidth
                   name="clubPostalCode"
@@ -150,22 +206,24 @@ function ClubForm() {
                   onChange={handleChange}
                   error={Boolean(errors?.clubPostalCode)}
                   helperText={(errors?.clubPostalCode)}
+                  InputProps={{
+                    inputComponent: NumberFormatCustom,
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  type="number"
                   fullWidth
                   name="clubMembershipFee"
                   label="Membership Fee"
                   id="membershipFee"
-                  InputProps={{
-                    startAdornment: "$"
-                  }}
                   value={club.clubMembershipFee}
                   onChange={handleChange}
                   error={Boolean(errors?.clubMembershipFee)}
                   helperText={(errors?.clubMembershipFee)}
+                  InputProps={{
+                    inputComponent: CurrencyFormatCustom,
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
