@@ -45,8 +45,6 @@ export default class GeoCoding {
         }
         console.log(city, state, country);
         console.log(address);
-      (error) => {
-        console.error(error);
-    }
+      
   }
 }

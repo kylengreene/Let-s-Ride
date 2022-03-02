@@ -26,7 +26,7 @@ import {useState, useEffect} from 'react';
 import AuthContext from "./context/AuthContext";
 import {logout, refresh, login} from "./api/login";
 import TestApiFuncs from "./components/TestApiFuncs";
-
+import ReduxTester from './components/ReduxTester';
 
 function App() {
 
@@ -98,6 +98,9 @@ function App() {
           </Route>
           <Route path="/geocode" exact>
             <GeoCoding />
+          </Route>
+          <Route path="/redux" exact>
+            <ReduxTester />
           </Route>
         </Switch>
         </AuthContext.Provider>
