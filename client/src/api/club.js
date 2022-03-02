@@ -8,6 +8,7 @@ export async function findClubsByPostal(clubPostalCode) {
             "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`
         }
     }
+    console.log("from api call ", clubPostalCode);
     const response = await fetch(`${baseUrl}/clubs/search/postal?clubPostalCode=${clubPostalCode}`, init);
     if (response.status === 200) {
         return await response.json();

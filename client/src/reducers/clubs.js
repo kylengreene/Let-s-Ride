@@ -8,8 +8,7 @@ const inititalState = {
 const clubs = (state = inititalState, action) => {
   switch (action.type) {
     case "CLUB_BY_POSTAL_REQUESTED":
-      findClubsByPostal(action.payload);
-      return { ...state };
+      return { ...state, loading: true};
     case "CLUB_BY_POSTAL_SUCCESS":
       return { ...state, loading: false, clubs: action.clubs };
     case "CLUB_BY_POSTAL_FAIL":
