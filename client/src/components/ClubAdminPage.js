@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import AuthContext from "../context/AuthContext";
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
 
 const emptyClub = {
     clubName: "Test",
@@ -49,14 +50,15 @@ function ClubAdminPage (){
   ];
   
   const rideColumns = [
-    { field: 'rideAddress1', headerName: 'Address Line 1', width: 130 },
-    { field: 'rideAddress2', headerName: 'Address Line 2', width: 130 },
-    { field: 'rideCity', headerName: 'City', width: 160 },
-    { field: 'ridePostalCode', headerName: 'Postal Code', width: 100 },
-    { field: 'rideState', headerName: 'State', width: 130 },
-    { field: 'rideDateTime', headerName: 'Start Time', width: 130 },
-    { field: 'rideDescription', headerName: 'Description', width: 400 },
-    { field: 'rideLimit', headerName: 'Rider Limit', width: 130 },
+    // { field: 'rideAddress1', headerName: 'Address Line 1', width: 130 },
+    // { field: 'rideAddress2', headerName: 'Address Line 2', width: 130 },
+    // { field: 'rideCity', headerName: 'City', width: 160 },
+    // { field: 'ridePostalCode', headerName: 'Postal Code', width: 100 },
+    // { field: 'rideState', headerName: 'State', width: 130 },
+    { field: 'Address', headerName: 'Location', width: 400},
+    { field: 'rideDateTime', headerName: 'Start Time', width: 150 },
+    { field: 'rideDescription', headerName: 'Description', width: 500 },
+    { field: 'rideLimit', headerName: 'Rider Limit', width: 120 },
   ];
   
   const riderRows = [
@@ -67,22 +69,14 @@ function ClubAdminPage (){
   const rideRows = [
     {
         id:1,
-        rideAddress1: "Primrose 12345",
-        rideAddress2: "",
-        rideCity: "Austin",
-        ridePostalCode: "12345",
-        rideState: "Texas",
+        Address: "East Treatpoint 123, Austin, Texas, 56789",
         rideDateTime: "10AM",
         rideDescription: "qwtyuiopqwertyuiopqwertyuiopasdfghjklzxcvbnm",
         rideLimit: "50"
     },
     {
         id:2,
-        rideAddress1: "Primrose 12345",
-        rideAddress2: "",
-        rideCity: "Mooselookmeguntic",
-        ridePostalCode: "12345",
-        rideState: "North Carolina",
+        Address: "West Primrock 12345, Austin, Texas, 56789",
         rideDateTime: "10AM",
         rideDescription: "short and to the point",
         rideLimit: "50"
@@ -91,6 +85,7 @@ function ClubAdminPage (){
     return (
     //<Container component="main" maxWidth="xl">
       <div style={{ height: 400, width: '100%' }}>
+        <Box component="form" noValidate onSubmit={handleSubmit} width="100%" height="100%" direction="row" justify="flex-start" alignItems="flex-start">
         <Grid 
           container
           width="100%"
@@ -99,31 +94,78 @@ function ClubAdminPage (){
           justify="flex-start"
           alignItems="flex-start"
         >
-        <Grid
-          width="35%"
-          height="100%"
-        >
-        <DataGrid
-          rows={riderRows}
-          columns={riderColumns}
-          pageSize={10}
-          rowsPerPageOptions={[10]}
-          checkboxSelection
-        />
+            <Grid
+                item
+                width="35%"
+                height="100%"
+            >
+                <DataGrid
+                    rows={riderRows}
+                    columns={riderColumns}
+                    pageSize={10}
+                    rowsPerPageOptions={[10]}
+                    checkboxSelection
+                />
+                <Grid item xs={6}>
+                <Button
+                id="createBtn"
+                fullWidth
+                type="submit"
+                variant="contained"
+                sx={{ mt: 3, mb: 2}}
+                >
+                  Approve
+                </Button>
+                </Grid>
+                <Grid item xs={6}>
+                    <Button
+                    href="http://localhost:3000/"
+                    id="cancelBtn"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    >
+                    Decline
+                    </Button>
+                </Grid>
+            </Grid>
+            <Grid
+                item
+                width="65%"
+                height="100%"
+            >
+                <DataGrid
+                    rows={rideRows}
+                    columns={rideColumns}
+                    pageSize={10}
+                    rowsPerPageOptions={[10]}
+                    checkboxSelection
+                />
+                <Grid item xs={6}>
+                <Button
+                id="createBtn2"
+                fullWidth
+                type="submit"
+                variant="contained"
+                sx={{ mt: 3, mb: 2}}
+                >
+                  Approve
+                </Button>
+                </Grid>
+                <Grid item xs={6}>
+                    <Button
+                    href="http://localhost:3000/"
+                    id="cancelBtn2"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    >
+                    Decline
+                    </Button>
+                </Grid>
+            </Grid>
         </Grid>
-        <Grid
-          width="65%"
-          height="100%"
-        >
-        <DataGrid
-          rows={rideRows}
-          columns={rideColumns}
-          pageSize={10}
-          rowsPerPageOptions={[10]}
-          checkboxSelection
-        />
-        </Grid>
-        </Grid>
+        </Box>
       </div>
     //</Container>
     );
