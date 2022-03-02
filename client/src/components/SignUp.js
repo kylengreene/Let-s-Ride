@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { withRouter, useHistory } from "react-router-dom"
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {createRider} from "../api/rider-api";
+import withRouter from '../utility/withRouter';
 
 function Copyright(props) {
   return (
@@ -32,8 +32,6 @@ const theme = createTheme();
 
 const SignUp =()=> {
 
-  const history = useHistory();
-
 
 
   const handleSubmit = async (event) => {
@@ -48,8 +46,6 @@ const SignUp =()=> {
       "password": data.get("password")
     };
     createRider(rider);
-
-    history.push("/login");
   };
 
   return (

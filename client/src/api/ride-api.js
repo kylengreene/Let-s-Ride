@@ -21,6 +21,24 @@ export async function findRidesByAddress(address) {
     }
 }
 
+export async function findRidesWithinWeek() {
+    const now = new Date();
+    const weekFromNow = addDays(now, 7);
+    const init = {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    }
+    const response = await fetch(`${baseUrl}/rides/search/datetime?now=${now.toISOString()}&weekFromNow=${weekFromNow.toISOString()}&projection=homepage` , init);
+    if (response.status === 200) {
+        return response.json();
+    } else {
+        return Promise.reject(response.status);
+    }
+}
+
 export async function findRideById(rideId) {
 
     const init = { method: "GET", headers: {
@@ -97,3 +115,9 @@ export async function deleteRide(rideId) {
     }
     return Promise.reject("Resource does not exist")
 }
+
+function addDays(date, days) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }

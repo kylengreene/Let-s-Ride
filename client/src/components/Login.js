@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { withRouter, useHistory } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,6 +15,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {login} from "../api/login.js";
 import {useContext, useState} from 'react';
 import AuthContext from '../context/AuthContext.js';
+import withRouter from '../utility/withRouter';
+import { useNavigate, Router } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -39,7 +40,8 @@ const Login = () => {
 });
 const [hasError, setHasError] = useState(false);
 
-const history = useHistory();
+const navigate = useNavigate();
+
 const authContext = useContext(AuthContext);
 
 const onChange = (event) => {
@@ -53,7 +55,7 @@ const handleSubmit = async (event) => {
     login(candidate)
         .then(principal => {
             authContext.login(principal);
-            history.push("/");
+            navigate("/account");
         }).catch(() => setHasError(true));
   }
 

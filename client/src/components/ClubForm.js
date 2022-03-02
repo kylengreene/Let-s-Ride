@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState, useContext, useCallback } from "react";
-import { withRouter, useHistory, useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,6 +14,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { findClubById, saveClubData } from "../api/club";
 import AuthContext from "../context/AuthContext";
+import withRouter from "../utility/withRouter";
 
 const emptyClub = {
   clubName: "",
@@ -28,7 +29,6 @@ function ClubForm() {
   const { clubId } = useParams();
   const [ errors, setErrors ] = useState(emptyClub);
   const theme = createTheme();
-  const history = useHistory();
   const authContext = useContext(AuthContext);
 
   const validate = () => {
@@ -46,8 +46,7 @@ function ClubForm() {
       authContext.logout();
       err = "Unauthorized";
     }
-    history.push("/error", err.toString())
-  }, [authContext, history]);
+  }, [authContext]);
 
   useEffect(() => {
       if (clubId) {
@@ -55,7 +54,7 @@ function ClubForm() {
               .then(result => setClub(result))
               .catch(handleErr);
       }
-  }, [clubId, history, handleErr]);
+  }, [clubId, handleErr]);
 
   function Copyright(props) {
     return (

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { useContext } from "react";
-import { withRouter } from "react-router-dom";
+import withRouter from '../utility/withRouter';
 
 function ClubCard({card}){
      function MakeFavorite(card){
@@ -9,7 +9,7 @@ function ClubCard({card}){
              id:`${card.id}`,
              rating: 2,
              comment: '',
-             imageUrl:`${card.images.large}` 
+             imageUrl:`${card.images.large}`
          }
         const init = {
             method: "POST",
@@ -32,10 +32,10 @@ function ClubCard({card}){
                    console.log("error result of", result);
                 }
             }).catch(console.error)
-        
+
         // }, []);
      }
-    
+
     return(
     <div className="card" >
         <h1>Club Card Here</h1>
@@ -52,4 +52,3 @@ function ClubCard({card}){
 }
 
 export default withRouter(ClubCard);
-

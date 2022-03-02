@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import withRouter from '../../utility/withRouter';
 import GoogleMapReact from "google-map-react";
 import Marker from "./Marker.js";
 
@@ -54,7 +54,6 @@ class mapDisplay extends Component {
             color="#fec52d"
             onClick={() => {
               this.centerMap(marker.lat, marker.lng);
-              this
             }}
           />
         );

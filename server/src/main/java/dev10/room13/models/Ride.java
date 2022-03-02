@@ -1,6 +1,7 @@
 package dev10.room13.models;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.FutureOrPresent;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,7 +35,11 @@ public class Ride {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int rideId;
     private Long routeId;
-    private Timestamp rideDatetime;
+
+    @FutureOrPresent
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date rideDatetime;
+
     private double rideLat;
     private double rideLng;
     private String rideDescription;

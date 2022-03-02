@@ -20,6 +20,7 @@ export async function findClubsByAddress(address) {
      }
  }
 
+
 export async function findClubById(clubId) {
 
     const init = { method: "GET", headers: {
@@ -30,7 +31,7 @@ export async function findClubById(clubId) {
 
     const response = await fetch(`${baseUrl}/clubs/${clubId}`, init);
     if (response.status === 200) {
-            return await response.json();
+            return response;
     } else if (response.status === 403) {
         return Promise.reject(403);
     }

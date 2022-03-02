@@ -2,7 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import {
   BrowserRouter as Router,
-  Switch,
+  Routes,
   Route,
   Redirect,
   useParams
@@ -25,7 +25,7 @@ import GeoCoding from "./components/Google-Maps/GeoCoding";
 import {useState, useEffect} from 'react';
 import AuthContext from "./context/AuthContext";
 import {logout, refresh, login} from "./api/login";
-import TestApiFuncs from "./components/TestApiFuncs";
+import { CssBaseline } from "@material-ui/core";
 
 
 function App() {
@@ -50,56 +50,32 @@ function App() {
 
   return (
     <div className="App">
+      <CssBaseline />
       <Router>
       <AuthContext.Provider value={auth}>
         <NavBar />
-        <Switch>
-          <Route path="/" exact>
-            <HomePage />
-          </Route>
-          <Route path="/account" exact>
-            <AccountProfile />
-          </Route>
-          <Route path="/test">
-            <TestApiFuncs />
-          </Route>
-          <Route path="/signup" exact>
-            <SignUp />
-          </Route>
-          <Route path="/clubform" exact>
-            <ClubForm />
-          </Route>
-          <Route path="/rideform" exact>
-            <RideForm />
-          </Route>
-          <Route path="/admin" exact>
-            <ClubAdminPage />
-          </Route>
-          <Route path="/login" exact>
-            <Login />
+        <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/account" element={<AccountProfile />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/clubs" >
+              <Route index element={<ClubPage/>} />
+              <Route path=":id" element={<ClubDetailPage />} >
+                <Route path="admin" element={<ClubAdminPage />} />
+              </Route>
+              <Route path="new" element={<ClubForm />} />
             </Route>
-          <Route path="/club" exact>
-            <ClubPage />
-          </Route>
-          <Route path ="/club/:id"exact>
-            <ClubDetailPage/>
-          </Route>
-          <Route path ="/ride"exact>
-            <RideDetailPage/>
-          </Route>
-          <Route path="/search" exact>
-            <SearchForm />
+            <Route path="/rides">
+
             </Route>
-          <Route path="/calendar" exact>
-            <Calendar />
-          </Route>
-          <Route path="/map" exact>
-            <Map />
-          </Route>
-          <Route path="/geocode" exact>
-            <GeoCoding />
-          </Route>
-        </Switch>
+            <Route path="search">
+              <Route path="clubs" element={<SearchForm parameter="clubs" />}/>
+              <Route path="rides" element={<SearchForm parameter="rides" />}/>
+            </Route>
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/map" element={<Map />} />
+        </Routes>
         </AuthContext.Provider>
       </Router>
     </div>

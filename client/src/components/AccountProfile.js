@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { withRouter } from "react-router-dom"
+import withRouter from '../utility/withRouter'
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -21,9 +21,21 @@ function AccountProfile() {
 
   const authContext = React.useContext(AuthContext);
 
+  const [user, setUser] = React.useState({});
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+    const response = await retrieveRider(authContext.credentials.username);
+    let data = await response.json();
+    setUser(data);
+    }
+    fetchData();
+}, [authContext]);
+
 
   return (
       <Container>
+        {console.log(user)}
     <Box sx={{ flexGrow: 1, m: 4, mx: "auto" }} maxWidth="md">
       <Grid container spacing={2}>
         <Grid item xs={4} >

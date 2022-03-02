@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react";
-import { withRouter, useHistory, history, push } from "react-router-dom"
+import {useLocation } from "react-router-dom"
+import withRouter from '../utility/withRouter';
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
@@ -24,6 +25,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { Button } from "@mui/material";
+import { findClubsByAddress } from "../api/club";
 
 function createData(clubName, clubDescription, clubPostalCode, clubMembershipFee ) {
   return {
@@ -33,22 +35,6 @@ function createData(clubName, clubDescription, clubPostalCode, clubMembershipFee
     clubMembershipFee,
   };
 }
-
-
-const rows = [
-  {
-  clubName:'Minneapolis Cycling Club',
-    clubDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non tellus orci ac auctor augue mauris. Magna fermentum iaculis eu non diam phasellus vestibulum lorem. Tincidunt ornare massa eget egestas purus. Quis blandit turpis cursus in hac habitasse platea dictumst.',
-    clubPostalCode:55408,
-    clubMembershipFee: 35
-  },
-  {
-  clubName:'St.Paul Cycling Club',
-  clubDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non tellus orci ac auctor augue mauris. Magna fermentum iaculis eu non diam phasellus vestibulum lorem. Tincidunt ornare massa eget egestas purus. Quis blandit turpis cursus in hac habitasse platea dictumst.',
-  clubPostalCode:55101,
-  clubMembershipFee: 25
-  }
-  ];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -218,16 +204,20 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-const ClubPage = () => {
+const ClubPage = (props) => {
+
+
+  const handleViewClub = null;
+
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('clubMembershipFee');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-   
-  let history = useHistory();
-   
+
+  let rows = [];
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -274,12 +264,9 @@ const ClubPage = () => {
   };
 
   const handleChangeDense = (event) => {
-    
+
     setDense(event.target.checked);
   };
-  function handleViewClub (props) {
-    history.push(`/club/${selected}`);
-  }
 
   const isSelected = (clubName) => selected.indexOf(clubName) !== -1;
 
@@ -380,5 +367,4 @@ const ClubPage = () => {
     </Box>
   );
 }
-
 export default withRouter(ClubPage);

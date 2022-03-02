@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState, useContext, useCallback } from "react";
-import { withRouter, useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,6 +16,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { findRideById, saveRideData } from "../api/ride-api";
 import AuthContext from "../context/AuthContext";
 import states from 'states-us';
+import withRouter from '../utility/withRouter';
 
 const emptyRide = {
   rideAddress1: "",
@@ -33,7 +34,6 @@ function RideForm() {
   const [ ride, setRide ] = useState(emptyRide);
   const { rideId } = useParams();
   const theme = createTheme();
-  const history = useHistory();
   const authContext = useContext(AuthContext);
 
   const handleErr = useCallback(err => {
@@ -41,8 +41,7 @@ function RideForm() {
       authContext.logout();
       err = "Unauthorized";
     }
-    history.push("/error", err.toString())
-  }, [authContext, history]);
+  }, [authContext]);
 
   useEffect(() => {
       if (rideId) {
@@ -50,7 +49,7 @@ function RideForm() {
               .then(result => setRide(result))
               .catch(handleErr);
       }
-  }, [rideId, history, handleErr]);
+  }, [rideId, handleErr]);
 
   function Copyright(props) {
     return (
@@ -80,7 +79,6 @@ function RideForm() {
     };
     console.log(rideData);
     saveRideData(rideData)
-        .then(() => history.push("/"))
         .catch(handleErr);
   };
 
