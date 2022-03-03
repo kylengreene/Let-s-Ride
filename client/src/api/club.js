@@ -2,29 +2,29 @@ import GeoCoding from "../components/Google-Maps/GeoCoding"
 
 const baseUrl = process.env.REACT_APP_API_URL, geoCode = new GeoCoding();
 
-export function findClubsByAddress(address) {
-    geoCode.AddressToCoord(address).then(
-        (response)
-    )
+// export function findClubsByAddress(address) {
+//     geoCode.AddressToCoord(address).then(
+//         (response)
+//     )
 
-    const geoResponse = await geoCode.AddressToCoord(address);
-    const geoResult  = await geoResponse.json();
-    const {lat, lng} = await geoResult.results[0].geometry.location;
-    console.log(await lat);
-     const init = {
-         method: "GET",
-         headers: {
-             "Accept": "application/json",
-             "Content-Type": "application/json"
-         }
-     }
-     const response = await fetch(`${baseUrl}/clubs/search/location?lat=${lat}&lng=${lng}`, init);
-     if (response.status === 200) {
-         return await response.json();
-     } else {
-         return Promise.reject(response.status);
-     }
- }
+//     const geoResponse = await geoCode.AddressToCoord(address);
+//     const geoResult  = await geoResponse.json();
+//     const {lat, lng} = await geoResult.results[0].geometry.location;
+//     console.log(await lat);
+//      const init = {
+//          method: "GET",
+//          headers: {
+//              "Accept": "application/json",
+//              "Content-Type": "application/json"
+//          }
+//      }
+//      const response = await fetch(`${baseUrl}/clubs/search/location?lat=${lat}&lng=${lng}`, init);
+//      if (response.status === 200) {
+//          return await response.json();
+//      } else {
+//          return Promise.reject(response.status);
+//      }
+//  }
 
 
 export async function findClubById(clubId) {

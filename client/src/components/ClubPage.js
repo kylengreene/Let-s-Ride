@@ -25,7 +25,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { Button } from "@mui/material";
-import { findClubsByAddress } from "../api/club";
+// import { findClubsByAddress } from "../api/club";
 import { findRidesByAddress } from "../api/ride-api"
 import AuthContext from "../context/AuthContext";
 
@@ -224,18 +224,18 @@ const ClubPage = (props) => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const fetchFunction = props.parameter === "clubs" ? findClubsByAddress : findRidesByAddress;
-  const addressStateFromSearch = router.router.location.state;
-  const address = `${addressStateFromSearch.street}, ${addressStateFromSearch.state} ${addressStateFromSearch.postal}`
+  // const fetchFunction = props.parameter === "clubs" ? findClubsByAddress : findRidesByAddress;
+//   const addressStateFromSearch = router.router.location.state;
+//   const address = `${addressStateFromSearch.street}, ${addressStateFromSearch.state} ${addressStateFromSearch.postal}`
 
 
-   React.useEffect(() => {
-     const fetchData = async () => {
-     const response = await fetchFunction(address);
-     setRows(response.json());
-     }
-     fetchData();
- }, [address, addressStateFromSearch]);
+//    React.useEffect(() => {
+//      const fetchData = async () => {
+//      const response = await fetchFunction(address);
+//      setRows(response.json());
+//      }
+//      fetchData();
+//  }, [address, addressStateFromSearch]);
 
  if (!rows) {
     return <h5>loading</h5>
