@@ -41,6 +41,8 @@ public class Role {
     @JoinColumn(name="rider_id")
     private Rider rider;
 
+    private boolean isPending;
+
     public Role(){}
 
     public Role(String name){

@@ -3,7 +3,9 @@ package dev10.room13.data;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -26,13 +28,23 @@ public interface RideRepository extends JpaRepository<Ride, Integer> {
     @RestResource(path = "datetime", rel = "datetime")
     public List<Ride> findAllByRideDatetimeBetween(@DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) Date now, @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) Date weekFromNow);
 
+    @Modifying
+    @Query("update Ride r set r.isPending = :pending where r.rideId = :rideId")
+    int updateRideSetIsPendingForId(@Param("pending") boolean pending, @Param("rideId") int rideId);
+
+    @Query(
+    value = "select * from ride r where r.is_pending = true and r.club_id = :clubId",
+    nativeQuery = true)
+    @RestResource(path = "pending", rel = "pending")
+    public List<Ride> findAllByIsPending(int clubId);
+
     @Override
     @PreAuthorize("hasAnyAuthority('ROLE_MEMBER', 'ROLE_ADMIN')")
     Ride save(@Param("ride") Ride entity);
 
     @Override
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")       // STRETCH: concatenate ROLE_ADMIN with club ID i.e., ROLE_ADMIN_3
-    void delete(Ride entity);                         // ?? Maybe add trigger to SQL SCHEMA (when new club is added, add a new role "ROLE_ADMIN_{club_id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    void delete(Ride entity);
 
     @Override
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

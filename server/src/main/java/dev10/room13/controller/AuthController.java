@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.ValidationException;
 
 import org.springframework.context.annotation.Import;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -90,5 +92,18 @@ public class AuthController {
         }
 
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+
+    @CrossOrigin
+    @PostMapping("api/refresh_token")
+    public ResponseEntity<Object> refresh(@AuthenticationPrincipal Rider user,
+                                          HttpServletResponse response) {
+        String jwtToken = converter.getTokenFromUser(user);
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("jwt", jwtToken);
+
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 }

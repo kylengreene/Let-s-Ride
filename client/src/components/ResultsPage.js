@@ -1,10 +1,13 @@
-import { render } from "@testing-library/react";
-import {useLocation } from "react-router-dom"
-import withRouter from '../utility/withRouter';
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { Button } from "@mui/material";
 import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import { alpha } from '@mui/material/styles';
+import Switch from '@mui/material/Switch';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -14,20 +17,15 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import Typography from '@mui/material/Typography';
 import { visuallyHidden } from '@mui/utils';
-import { Button } from "@mui/material";
-// import { findClubsByAddress } from "../api/club";
-import { findRidesByAddress } from "../api/ride-api"
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { findClubsByAddress } from "../api/club";
+import { findRidesByAddress } from "../api/ride-api";
 import AuthContext from "../context/AuthContext";
+import withRouter from '../utility/withRouter';
 
 function createData(clubName, clubDescription, clubPostalCode, clubMembershipFee ) {
   return {
@@ -181,7 +179,7 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          Clubs
         </Typography>
       )}
 
@@ -215,7 +213,7 @@ const ClubPage = (props) => {
 
   const handleViewClub = null;
 
-  const [rows, setRows] = React.useState([]);
+  const [rows, setRows] = React.useState(null);
 
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('clubMembershipFee');
@@ -224,18 +222,20 @@ const ClubPage = (props) => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  // const fetchFunction = props.parameter === "clubs" ? findClubsByAddress : findRidesByAddress;
-//   const addressStateFromSearch = router.router.location.state;
-//   const address = `${addressStateFromSearch.street}, ${addressStateFromSearch.state} ${addressStateFromSearch.postal}`
+  const fetchFunction = props.parameter === "clubs" ? findClubsByAddress : findRidesByAddress;
+
+  const addressStateFromSearch = router.router.location.state;
+
+  const address = `${addressStateFromSearch.street}, ${addressStateFromSearch.state} ${addressStateFromSearch.postal}`
 
 
-//    React.useEffect(() => {
-//      const fetchData = async () => {
-//      const response = await fetchFunction(address);
-//      setRows(response.json());
-//      }
-//      fetchData();
-//  }, [address, addressStateFromSearch]);
+   React.useEffect(() => {
+     const fetchData = async () => {
+     const response = await fetchFunction(address);
+     setRows(await response._embedded.clubs);
+     }
+     fetchData();
+ }, [address, fetchFunction]);
 
  if (!rows) {
     return <h5>loading</h5>
@@ -300,7 +300,6 @@ const ClubPage = (props) => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      {console.log(rows)}
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>

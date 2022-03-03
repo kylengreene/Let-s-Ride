@@ -44,6 +44,7 @@ public class Ride {
     private double rideLng;
     private String rideDescription;
     private Integer rideLimit;
+    private boolean isPending;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "rider_id")

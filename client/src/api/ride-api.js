@@ -1,6 +1,6 @@
-import GeoCoding from "../components/Google-Maps/GeoCoding";
+import GeoCode from "../components/Google-Maps/GeoCode";
 
-const baseUrl = process.env.REACT_APP_API_URL, geoCode = new GeoCoding();
+const baseUrl = process.env.REACT_APP_API_URL, geoCode = new GeoCode();
 
 
 export async function findRidesByAddress(address) {
