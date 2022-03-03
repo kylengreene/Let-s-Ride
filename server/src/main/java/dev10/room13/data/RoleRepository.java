@@ -13,9 +13,7 @@ import dev10.room13.models.Role;
 @RepositoryRestResource(path = "roles")
 public interface RoleRepository extends JpaRepository<Role, Integer> {
 
-    @Query(
-        value = "select ri.rider_firstname, ri.rider_lastname, r.name, ri.rider_postal from role r where (r.is_pending = true and r.club_id = :clubId) inner join rider ri on ri.rider_id = r.rider_id",
-        nativeQuery = true)
+    @Query("select r, ri, c from Role r join r.rider ri join r.club c where c.clubId = :clubId and r.isPending = true")
         @RestResource(path = "pending", rel = "pending")
         public List<Role> findAllByIsPending(int clubId);
 
