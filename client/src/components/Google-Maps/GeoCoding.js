@@ -5,7 +5,7 @@ import { geocoder } from "@googlemaps/google-maps-services-js";
 import marker from "./Marker";
 import Geocode from "react-geocode";
 
-export default class GeoCoding {
+export default class GeoCode {
 
   constructor() {
   Geocode.setApiKey("AIzaSyDHYOOmwx5qaEfSTYZG_hfDoEx4pAdWJGE");
@@ -15,11 +15,20 @@ export default class GeoCoding {
   Geocode.enableDebug();
   }
 
-  async AddressToCoord(address) {
-    const response = await Geocode.fromAddress(address);
-    const result = await response.json()
-    return response.status === "OK" ? result : Promise.reject(response.status);
-}
+  fromLatLng(lat, lng) {
+    const closure = () => {
+      return Geocode.fromLatLng(lat, lng);  //the closure gives Geocode.fromLatLng the ability                                                 to use arguments that have fallen out of scope
+    }
+    return closure;
+  }
+
+  fromAddress(address) {
+    const closure = () => {
+      return Geocode.fromAddress(address);
+    }
+    return closure;
+  }
+
 
 
   async CoordToAddress(lat, long) {

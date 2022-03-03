@@ -26,7 +26,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { Button } from "@mui/material";
 // import { findClubsByAddress } from "../api/club";
-// import { findRidesByAddress } from "../api/ride-api"
+import { findRidesByAddress } from "../api/ride-api"
 import AuthContext from "../context/AuthContext";
 
 function createData(clubName, clubDescription, clubPostalCode, clubMembershipFee ) {
@@ -239,13 +239,13 @@ const ClubPage = (props) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   // const fetchFunction = props.parameter === "clubs" ? findClubsByAddress : findRidesByAddress;
-  // const addressStateFromSearch = router.router.location.state;
-  // const address = `${addressStateFromSearch.street}, ${addressStateFromSearch.state} ${addressStateFromSearch.postal}`
+//   const addressStateFromSearch = router.router.location.state;
+//   const address = `${addressStateFromSearch.street}, ${addressStateFromSearch.state} ${addressStateFromSearch.postal}`
 
 
 //    React.useEffect(() => {
 //      const fetchData = async () => {
-//     //  const response = await fetchFunction(address);
+//      const response = await fetchFunction(address);
 //      setRows(response.json());
 //      }
 //      fetchData();
