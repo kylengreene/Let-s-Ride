@@ -34,7 +34,8 @@ public class ClubRepositoryTest {
         testClub = new Club();
         testClub.setClubName("CLUB5");
         testClub.setClubDescription("test club5");
-        testClub.setClubPostalCode("99999");
+        testClub.setClubLat(100.0000);
+        testClub.setClubLng(100.0000);
         testClub.setClubMembershipFee(new BigDecimal(12));
     }
 
@@ -57,8 +58,7 @@ public class ClubRepositoryTest {
         Club actual = clubRepository.findById(1).get();
         assertTrue(actual.getClubId() == 1);
         assertTrue(actual.getClubName().equalsIgnoreCase("CLUB1"));
-        assertTrue(actual.getRiders().size() == 1);
-        assertTrue(actual.getRiders().get(0).getRiderFirstname().equals("Bjarne"));
+        assertTrue(actual.getRiders().size() == 3);
     }
 
     @Test
@@ -83,12 +83,9 @@ public class ClubRepositoryTest {
     }
 
     @Test
-    void findsAllByPostalCode() {
-        List<Club> list = clubRepository.findAllByClubPostalCode("22222");
-        assertTrue(list.size() == 2);
-        for (int i = 0; i < list.size(); i++) {
-            assertTrue(list.get(i).getClubName().equals(String.format("CLUB%s", 3+i)));
-        }
+    void findsAllByLatAndLng() {
+        List<Club> list = clubRepository.findAllByClubLatAndClubLng(100.0000, 100.0000);
+        assertTrue(list.size() == 3);
     }
 
     @Test

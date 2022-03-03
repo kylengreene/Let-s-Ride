@@ -1,19 +1,30 @@
 package dev10.room13.data;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import dev10.room13.models.Ride;
 
 @CrossOrigin
 @RepositoryRestResource(collectionResourceRel = "rides", path = "rides")
 public interface RideRepository extends JpaRepository<Ride, Integer> {
+
+    @Query("select r from Ride r where (r.rideLat < :lat + 0.3 and r.rideLat > :lat - 0.3) and (r.rideLng > :lng - 0.3 and r.rideLng < :lng + 0.3)")
+    @RestResource(path = "location", rel = "location")
+    public List<Ride> findAllByRideLatAndRideLng(double lat, double lng);
+
+    @RestResource(path = "datetime", rel = "datetime")
+    public List<Ride> findAllByRideDatetimeBetween(@DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) Date now, @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) Date weekFromNow);
 
     @Override
     @PreAuthorize("hasAnyAuthority('ROLE_MEMBER', 'ROLE_ADMIN')")

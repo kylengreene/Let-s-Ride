@@ -33,10 +33,7 @@ export async function retrieveRider(username) {
     }
     const response = await fetch(`${baseUrl}/riders/search/user?username=${username}`, init)
     if (response.status === 200) {
-        let data = await response.json();
-        let clubData = await getClubsForRider(data);
-        data.clubs = clubData;
-        return data;
+        return response;
 
     } else if (response.status === 403) {
         return Promise.reject(403);

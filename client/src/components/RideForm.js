@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState, useContext, useCallback } from "react";
-import { withRouter, useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,6 +16,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { findRideById, saveRideData } from "../api/ride-api";
 import AuthContext from "../context/AuthContext";
 import states from 'states-us';
+import withRouter from '../utility/withRouter';
 import CurrencyFormat from 'react-currency-format';
 
 const NumberFormatCustom = React.forwardRef(function CurrencyFormatCustom(props, ref) {
@@ -38,6 +39,9 @@ const NumberFormatCustom = React.forwardRef(function CurrencyFormatCustom(props,
   );
 });
 
+
+
+
 const emptyRide = {
   rideAddress1: "",
   rideAddress2: "",
@@ -55,7 +59,6 @@ function RideForm() {
   const { rideId } = useParams();
   const [ errors, setErrors ] = useState(emptyRide);
   const theme = createTheme();
-  const history = useHistory();
   const authContext = useContext(AuthContext);
 
   const validate = () => {
@@ -92,8 +95,7 @@ function RideForm() {
       authContext.logout();
       err = "Unauthorized";
     }
-    history.push("/error", err.toString())
-  }, [authContext, history]);
+  }, [authContext]);
 
   useEffect(() => {
       if (rideId) {
@@ -101,7 +103,7 @@ function RideForm() {
               .then(result => setRide(result))
               .catch(handleErr);
       }
-  }, [rideId, history, handleErr]);
+  }, [rideId, handleErr]);
 
   function Copyright(props) {
     return (
@@ -116,6 +118,26 @@ function RideForm() {
     );
   }
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    let rideData = {
+      "rideAddress1": data.get("addressLine1"),
+      "rideAddress2": data.get("addressLine2"),
+      "rideCity": data.get("city"),
+      "ridePostalCode": data.get("postal"),
+      "rideState": usaState,
+      "rideDateTime": data.get("date"),
+      "rideDescription": data.get("description"),
+      "rideLimit": data.get("limit")
+    };
+    console.log(rideData);
+    saveRideData(rideData)
+        .catch(handleErr);
+  };
+
+  const [usaState, setUsaState] = useState("");
+
   const handleChange = (event) => {
     const { name, value } = event.target
     setRide({
@@ -124,15 +146,6 @@ function RideForm() {
     })
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if(validate()) {
-      console.log(ride);
-      // saveRideData(ride)
-      //   .then(() => history.push("/"))
-      //   .catch(handleErr);
-    } 
-  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -150,7 +163,7 @@ function RideForm() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Create Ride 
+            Create Ride
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>

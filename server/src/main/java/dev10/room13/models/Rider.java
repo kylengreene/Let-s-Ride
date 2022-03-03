@@ -2,7 +2,9 @@ package dev10.room13.models;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -14,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 /**
  * model for the Rider entity
@@ -33,6 +37,7 @@ import lombok.ToString;
  */
 @Entity
 @Data
+@EqualsAndHashCode(exclude = "rsvpRides")
 public class Rider implements UserDetails {
 
     @Id
@@ -47,27 +52,27 @@ public class Rider implements UserDetails {
     @JsonIgnore private boolean isDisabled;
 
     @Transient
-    private List<GrantedAuthority> authorities;
+    private Set<GrantedAuthority> authorities;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "rider_role",
-      joinColumns = @JoinColumn(name = "rider_id"),
-      inverseJoinColumns = @JoinColumn(name = "role_id"))
-      @ToString.Exclude
-    private List<Role> roles;
+    @OneToMany(mappedBy = "rider")
+    @ToString.Exclude
+    private Set<Role> roles;
 
 
+    @ManyToMany(mappedBy = "attendees")
+    private Set<Ride> rsvpRides;
+
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "rider_club",
+    @JoinTable(name = "role",
       joinColumns = @JoinColumn(name = "rider_id"),
       inverseJoinColumns = @JoinColumn(name = "club_id"))
       @ToString.Exclude
-    private List<Club> clubs;
+    private Set<Club> clubs;
 
     public Rider(){};
 
-    public Rider(String username, String password, boolean isDisabled, List<Role> roles){
+    public Rider(String username, String password, boolean isDisabled, Set<Role> roles){
       this.username = username;
       this.password = password;
       this.isDisabled = isDisabled;
@@ -79,16 +84,35 @@ public class Rider implements UserDetails {
      * @param roles  used by {@code getAuthorities}
      * @return List<GrantedAuthority>  the authorities from corresponding roles i.e., role: "USER", authority: "ROLE_USER"
      */
-    public static List<GrantedAuthority> convertRolesToAuthorities(List<Role> roles) {
-      List<GrantedAuthority> authorities = new ArrayList<>(roles.size());
+    public static Set<GrantedAuthority> convertRolesToAuthorities(Set<Role> roles) {
+      boolean admin = false;
+      Set<GrantedAuthority> authorities = new HashSet<>(roles.size());
       for (Role role : roles) {
           Assert.isTrue((!role.getName().startsWith("ROLE_")),
                           String.format("%s cannot start with %s (it is automatically added)",
                                           role.getName(), "ROLE_"));
-          authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
-      }
-      return authorities;
+        try {
+          if (role.getName().equalsIgnoreCase("admin")) {
+
+              if (admin) throw new RuntimeException("User can only be the admin of one club");
+              else {
+                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN_" + role.getClub().getClubId()));
+                admin = true;
+              }
+          }
+
+
+          if (role.getClub() != null) {
+              authorities.add(new SimpleGrantedAuthority(String.format("ROLE_MEMBER_%s", role.getClub().getClubId())));
+        } else {
+              authorities.add(new SimpleGrantedAuthority(String.format("ROLE_USER")));
+        }
+    } catch (RuntimeException ex) {
+              System.out.println(ex.getMessage());
+    }
   }
+  return authorities;
+}
 
 
     /**
@@ -96,11 +120,16 @@ public class Rider implements UserDetails {
      *
      * @return List<Role> authorities formatted into role syntax i.e., removal of the "ROLE_" prefix
      */
-    public static List<Role> convertAuthoritiesToRoles(Collection<GrantedAuthority> authorities) {
+    public List<Role> convertAuthoritiesToRoles(Collection<GrantedAuthority> authorities) {
         return authorities.stream()
             .map(a -> {
+              String[] auth = a.getAuthority().split("_");
                 Role role = new Role();
-                role.setName(a.getAuthority().substring(5));
+                role.setName(auth[1]);
+                if (auth.length > 2) {
+                  role.setClub(new Club());
+                  role.getClub().setClubId(Integer.parseInt(auth[2]));
+                }
                 return role;
             })
             .collect(Collectors.toList());
@@ -160,8 +189,8 @@ public class Rider implements UserDetails {
      */
     @JsonIgnore
     @Override
-    public List<GrantedAuthority> getAuthorities() {
-      List<GrantedAuthority> list = convertRolesToAuthorities(this.roles);
-      return list;
+    public Set<GrantedAuthority> getAuthorities() {
+      Set<GrantedAuthority> set = convertRolesToAuthorities(this.roles);
+      return set;
     }
 }

@@ -1,18 +1,39 @@
-const baseUrl = process.env.REACT_APP_API_URL;
+import GeoCoding from "../components/Google-Maps/GeoCoding";
+
+const baseUrl = process.env.REACT_APP_API_URL, geoCode = new GeoCoding();
 
 
-export async function findRidesByPostal(ridePostal) {
+export async function findRidesByAddress(address) {
+   const {lat, lng} = await geoCode.AddressToCoord(address);
     const init = {
         method: "GET",
         headers: {
             "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
             "Content-Type": "application/json"
         }
     }
-    const response = await fetch(`${baseUrl}/rides/search/postal?rideLocation=${ridePostal}`, init);
+    const response = await fetch(`${baseUrl}/rides/search/location?lat=${lat}&lng=${lng}`, init);
     if (response.status === 200) {
-        return await response.json();
+        let data =  await response.json();
+        console.log(data);
+    } else {
+        return Promise.reject(response.status);
+    }
+}
+
+export async function findRidesWithinWeek() {
+    const now = new Date();
+    const weekFromNow = addDays(now, 7);
+    const init = {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    }
+    const response = await fetch(`${baseUrl}/rides/search/datetime?now=${now.toISOString()}&weekFromNow=${weekFromNow.toISOString()}&projection=homepage` , init);
+    if (response.status === 200) {
+        return response.json();
     } else {
         return Promise.reject(response.status);
     }
@@ -94,3 +115,9 @@ export async function deleteRide(rideId) {
     }
     return Promise.reject("Resource does not exist")
 }
+
+function addDays(date, days) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }

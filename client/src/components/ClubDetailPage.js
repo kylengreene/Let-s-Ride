@@ -1,11 +1,14 @@
 import { render } from "@testing-library/react";
-import { withRouter } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom";
+import withRouter from "../utility/withRouter";
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { Container } from "@mui/material";
+import { findClubById } from "../api/club";
+import AuthContext from "../context/AuthContext";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -16,6 +19,25 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function ClubDetailPage() {
+  let { id } = useParams();
+
+  const [club, setClub] = React.useState(null);
+  const authContext = React.useContext(AuthContext);
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+    const response = await (await findClubById(id)).json();
+    setClub(response);
+    }
+    fetchData();
+}, [id]);
+
+  if (!club) {
+    return <h5>loading</h5>
+  }
+
+
   return (
       <Container>
     <Box sx={{ flexGrow: 1, m: 4, mx: "auto" }} maxWidth="md">
@@ -27,13 +49,13 @@ function ClubDetailPage() {
          </Item>
         </Grid>
         <Grid item xs={8}>
-          <Item>xs=4</Item>
+          <Item>jkgu</Item>
         </Grid>
         <Grid item xs={4}>
           <Item>xs=4</Item>
         </Grid>
         <Grid item xs={8}>
-          <Item>xs=8</Item>
+          <Item>{}</Item>
         </Grid>
       </Grid>
     </Box>

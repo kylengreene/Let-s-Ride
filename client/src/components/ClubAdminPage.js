@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext, useCallback } from "react";
-import { withRouter, useHistory, useParams } from "react-router-dom";
+import { withRouter, useParams } from "react-router-dom";
 import * as React from 'react';
+import { render } from "@testing-library/react";
 import { DataGrid } from '@mui/x-data-grid';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
@@ -30,12 +31,13 @@ const emptyRide = {
     rideLimit: "50"
 };
 
+
+
 function ClubAdminPage (){
     const [checked, setChecked] = React.useState([0]);
     const [ club, setClub ] = useState(emptyClub);
     const { clubId } = useParams();
     const [ errors, setErrors ] = useState(emptyClub);
-    const history = useHistory();
     const authContext = useContext(AuthContext);
 
   const handleSubmit = async (event) => {
@@ -171,4 +173,4 @@ function ClubAdminPage (){
     );
   }
 
-export default withRouter(ClubAdminPage);
+export default (ClubAdminPage);

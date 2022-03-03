@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { withRouter } from "react-router-dom"
+import withRouter from '../utility/withRouter'
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -21,6 +21,21 @@ function AccountProfile() {
 
   const authContext = React.useContext(AuthContext);
 
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+    const response = await retrieveRider(authContext.credentials.username);
+    let data = await response.json();
+    setUser(data);
+    }
+    fetchData();
+}, [authContext]);
+
+if (!user) {
+  return <h5>loading</h5>
+}
+
 
   return (
       <Container>
@@ -33,7 +48,7 @@ function AccountProfile() {
          </Item>
         </Grid>
         <Grid item xs={8}>
-          <Item>xs=4</Item>
+          <Item>{user.riderFirstname}</Item>
         </Grid>
         <Grid item xs={4}>
           <Item>xs=4</Item>

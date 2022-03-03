@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState, useContext, useCallback } from "react";
-import { withRouter, useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import withRouter from '../utility/withRouter';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -48,7 +49,7 @@ function RideDetailPage () {
           }}
         >
         <Typography component="h1" variant="h5" sx={{ border:1, p:2}}>
-            Ride Detail Page 
+            Ride Detail Page
         </Typography>
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2} sx={{ mt:16 }}>

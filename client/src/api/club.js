@@ -1,20 +1,31 @@
-const baseUrl = process.env.REACT_APP_API_URL;
+import GeoCoding from "../components/Google-Maps/GeoCoding"
 
-export async function findClubsByPostal(clubPostalCode) {
-    const init = {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`
-        }
-    }
-    const response = await fetch(`${baseUrl}/clubs/search/postal?clubPostalCode=${clubPostalCode}`, init);
-    if (response.status === 200) {
-        return await response.json();
-    } else {
-        return Promise.reject(response.status);
-    }
-}
+const baseUrl = process.env.REACT_APP_API_URL, geoCode = new GeoCoding();
+
+// export function findClubsByAddress(address) {
+//     geoCode.AddressToCoord(address).then(
+//         (response)
+//     )
+
+//     const geoResponse = await geoCode.AddressToCoord(address);
+//     const geoResult  = await geoResponse.json();
+//     const {lat, lng} = await geoResult.results[0].geometry.location;
+//     console.log(await lat);
+//      const init = {
+//          method: "GET",
+//          headers: {
+//              "Accept": "application/json",
+//              "Content-Type": "application/json"
+//          }
+//      }
+//      const response = await fetch(`${baseUrl}/clubs/search/location?lat=${lat}&lng=${lng}`, init);
+//      if (response.status === 200) {
+//          return await response.json();
+//      } else {
+//          return Promise.reject(response.status);
+//      }
+//  }
+
 
 export async function findClubById(clubId) {
 
@@ -24,9 +35,9 @@ export async function findClubById(clubId) {
         "Accept": "application/json"
     }};
 
-    const response = await fetch(`${baseUrl}/${clubId}`, init);
+    const response = await fetch(`${baseUrl}/clubs/${clubId}`, init);
     if (response.status === 200) {
-        return response.json();
+            return response;
     } else if (response.status === 403) {
         return Promise.reject(403);
     }

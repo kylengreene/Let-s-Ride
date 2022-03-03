@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { withRouter } from "react-router-dom";
+import withRouter from '../utility/withRouter';
 import FullCalendar from '@fullcalendar/react'; // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 

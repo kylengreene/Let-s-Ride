@@ -1,0 +1,19 @@
+
+
+View all rides
+-- has at least ROLE_USER authority
+
+sign up for a ride
+-- ROLE_USER
+
+viewing clubs
+-- ROLE_USER
+
+delete ride/club
+-- ROLE_ADMIN_{CLUB_ID}
+
+on the club page
+-- show a list of club's rides
+---- buttons available to ROLE_USER
+     - view details -> ride detail page
+     

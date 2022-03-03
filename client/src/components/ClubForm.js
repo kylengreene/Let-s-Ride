@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState, useContext, useCallback } from "react";
-import { withRouter, useHistory, useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { findClubById, saveClubData } from "../api/club";
 import AuthContext from "../context/AuthContext";
 import CurrencyFormat from 'react-currency-format';
-
+// import withRouter from "react-router-dom"
 const CurrencyFormatCustom = React.forwardRef(function CurrencyFormatCustom(props, ref) {
   const { onChange, ...other } = props;
 
@@ -78,7 +78,6 @@ function ClubForm() {
   const { clubId } = useParams();
   const [ errors, setErrors ] = useState(emptyClub);
   const theme = createTheme();
-  const history = useHistory();
   const authContext = useContext(AuthContext);
 
   const validate = () => {
@@ -106,8 +105,7 @@ function ClubForm() {
       authContext.logout();
       err = "Unauthorized";
     }
-    history.push("/error", err.toString())
-  }, [authContext, history]);
+  }, [authContext]);
 
   useEffect(() => {
       if (clubId) {
@@ -115,7 +113,7 @@ function ClubForm() {
               .then(result => setClub(result))
               .catch(handleErr);
       }
-  }, [clubId, history, handleErr]);
+  }, [clubId, handleErr]);
 
   function Copyright(props) {
     return (
@@ -133,7 +131,7 @@ function ClubForm() {
   const handleChange = (event) => {
     const { name, value } = event.target
     setClub({
-      ...club, 
+      ...club,
       [name]: value
     })
   };
@@ -164,7 +162,7 @@ function ClubForm() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            {club.clubId ? "Update" : "Create"} Club 
+            {club.clubId ? "Update" : "Create"} Club
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt:3 }}>
             <Grid container spacing={2}>
@@ -256,4 +254,4 @@ function ClubForm() {
     </ThemeProvider>
   );
 }
-export default withRouter(ClubForm);
+export default (ClubForm);

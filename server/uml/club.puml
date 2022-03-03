@@ -1,0 +1,12 @@
+@startuml
+class Club {
+    -String clubName
+    -String clubDescription
+    -String clubPostalCode
+    -BigDecimal clubMembershipFee
+    -List<Rider> riders
+    -List<Ride> rides
+
+    .. Getters, Setters, Constructor ..
+}
+@enduml
