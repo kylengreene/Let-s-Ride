@@ -1,8 +1,9 @@
 import { useEffect, useState, useContext, useCallback } from "react";
-import { withRouter, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import withRouter from "../utility/withRouter"
 import * as React from 'react';
 import { render } from "@testing-library/react";
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, selectedGridRowsCountSelector } from '@mui/x-data-grid';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
@@ -12,6 +13,7 @@ import AuthContext from "../context/AuthContext";
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
+import { findPendingRides, findPendingMemberships, saveAllRides, saveAllMembers, declineSelectedRiders, declineSelectedRides } from "../api/admin-api";
 
 const emptyClub = {
     clubName: "Test",
@@ -34,10 +36,15 @@ const emptyRide = {
 
 
 function ClubAdminPage (){
+
     const [checked, setChecked] = React.useState([0]);
     const [ club, setClub ] = useState(emptyClub);
     const { clubId } = useParams();
     const [ errors, setErrors ] = useState(emptyClub);
+    const [riderRows, setRiderRows] = useState(null);
+    const [rideRows, setRideRows] = useState(null);
+    const [selectedRides, setSelectedRides] = useState([]);
+    const [selectedRiders, setSelectedRiders] = useState([]);
     const authContext = useContext(AuthContext);
 
   const handleSubmit = async (event) => {
@@ -46,49 +53,43 @@ function ClubAdminPage (){
   };
 
   const riderColumns = [
-    { field: 'riderFirstName', headerName: 'First name', width: 200 },
-    { field: 'riderLastName', headerName: 'Last name', width: 200 },
+    { field: 'riderFullName', headerName: 'Name', width: 200 },,
     { field: 'riderPostal', headerName: 'Postal Code', width: 200 },
   ];
-  
+
   const rideColumns = [
-    // { field: 'rideAddress1', headerName: 'Address Line 1', width: 130 },
-    // { field: 'rideAddress2', headerName: 'Address Line 2', width: 130 },
-    // { field: 'rideCity', headerName: 'City', width: 160 },
-    // { field: 'ridePostalCode', headerName: 'Postal Code', width: 100 },
-    // { field: 'rideState', headerName: 'State', width: 130 },
-    { field: 'Address', headerName: 'Location', width: 400},
-    { field: 'rideDateTime', headerName: 'Start Time', width: 150 },
+    { field: 'address', headerName: 'Location', width: 350},
+    { field: 'rideDatetime', headerName: 'Start Time', width: 175 },
     { field: 'rideDescription', headerName: 'Description', width: 500 },
     { field: 'rideLimit', headerName: 'Rider Limit', width: 120 },
   ];
-  
-  const riderRows = [
-    { id:1, riderFirstName: 'Welp', riderLastName: 'Snow', riderPostal: 12345 },
-    { id:2, riderFirstName: 'Welp', riderLastName: 'Snow', riderPostal: 12345 },
-  ];
-  
-  const rideRows = [
-    {
-        id:1,
-        Address: "East Treatpoint 123, Austin, Texas, 56789",
-        rideDateTime: "10AM",
-        rideDescription: "qwtyuiopqwertyuiopqwertyuiopasdfghjklzxcvbnm",
-        rideLimit: "50"
-    },
-    {
-        id:2,
-        Address: "West Primrock 12345, Austin, Texas, 56789",
-        rideDateTime: "10AM",
-        rideDescription: "short and to the point",
-        rideLimit: "50"
-    },
-  ];
+
+  useEffect(() => {
+    const fetchRiders = async () => {
+      const response = await findPendingMemberships(clubId);
+      setRiderRows(response);
+    }
+    const fetchRides = async () => {
+      const response = await findPendingRides(clubId);
+      setRideRows(response);
+      console.log(response)
+    }
+    const fetchRidesAndRiders = async () => {
+      fetchRides();
+      fetchRiders();
+    }
+    fetchRidesAndRiders();
+  }, []);
+
+  if (!rideRows || !riderRows) {
+    return <h5>loading</h5>
+  }
+
     return (
     //<Container component="main" maxWidth="xl">
       <div style={{ height: 400, width: '100%' }}>
         <Box component="form" noValidate onSubmit={handleSubmit} width="100%" height="100%" direction="row" justify="flex-start" alignItems="flex-start">
-        <Grid 
+        <Grid
           container
           width="100%"
           height="200%"
@@ -104,15 +105,21 @@ function ClubAdminPage (){
                 <DataGrid
                     rows={riderRows}
                     columns={riderColumns}
+                    getRowId={row => row.roleId}
                     pageSize={10}
                     rowsPerPageOptions={[10]}
                     checkboxSelection
+                    onSelectionModelChange={row => setSelectedRiders(row)}
                 />
                 <Grid item xs={6}>
                 <Button
                 id="createBtn"
                 fullWidth
                 type="submit"
+                onClick={() => {
+                  saveAllMembers(selectedRiders);
+                  setRiderRows(riderRows.filter(r => !selectedRiders.includes(r.roleId)));
+                }}
                 variant="contained"
                 sx={{ mt: 3, mb: 2}}
                 >
@@ -121,10 +128,13 @@ function ClubAdminPage (){
                 </Grid>
                 <Grid item xs={6}>
                     <Button
-                    href="http://localhost:3000/"
                     id="cancelBtn"
                     fullWidth
                     variant="contained"
+                    onClick={() => {
+                      declineSelectedRiders(selectedRiders);
+                      setRiderRows(riderRows.filter(r => !selectedRiders.includes(r.roleId)));
+                    }}
                     sx={{ mt: 3, mb: 2 }}
                     >
                     Decline
@@ -139,8 +149,10 @@ function ClubAdminPage (){
                 <DataGrid
                     rows={rideRows}
                     columns={rideColumns}
+                    getRowId={row => row.rideId}
                     pageSize={10}
                     rowsPerPageOptions={[10]}
+                    onSelectionModelChange={row => setSelectedRides(row)}
                     checkboxSelection
                 />
                 <Grid item xs={6}>
@@ -149,6 +161,10 @@ function ClubAdminPage (){
                 fullWidth
                 type="submit"
                 variant="contained"
+                onClick={() => {
+                  saveAllRides(selectedRides);
+                  setRideRows(rideRows.filter(r => !selectedRides.includes(r.rideId)));
+                }}
                 sx={{ mt: 3, mb: 2}}
                 >
                   Approve
@@ -156,10 +172,13 @@ function ClubAdminPage (){
                 </Grid>
                 <Grid item xs={6}>
                     <Button
-                    href="http://localhost:3000/"
                     id="cancelBtn2"
                     fullWidth
                     variant="contained"
+                    onClick={() => {
+                      declineSelectedRides(selectedRides);
+                      setRideRows(rideRows.filter(r => !selectedRides.includes(r.rideId)));
+                    }}
                     sx={{ mt: 3, mb: 2 }}
                     >
                     Decline
@@ -173,4 +192,4 @@ function ClubAdminPage (){
     );
   }
 
-export default (ClubAdminPage);
+export default withRouter(ClubAdminPage);

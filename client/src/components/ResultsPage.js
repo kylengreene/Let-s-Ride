@@ -24,10 +24,9 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import { findClubsByAddress } from "../api/club";
 import { findRidesByAddress } from "../api/ride-api";
-import { Button } from "@mui/material";
-import { findRidesByAddress } from "../api/ride-api"
 import AuthContext from "../context/AuthContext";
 import withRouter from '../utility/withRouter';
+import SearchForm from './SearchForm'
 
 function createData(clubName, clubDescription, clubPostalCode, clubMembershipFee ) {
   return {
@@ -206,14 +205,11 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-const ClubPage = (props) => {
+const ResultsPage = (props) => {
 
   const router = {...props}
 
   const authContext = React.useContext(AuthContext);
-
-
-  const handleViewClub = null;
 
   const [rows, setRows] = React.useState(null);
 
@@ -226,22 +222,20 @@ const ClubPage = (props) => {
 
   const fetchFunction = props.parameter === "clubs" ? findClubsByAddress : findRidesByAddress;
 
-  const addressStateFromSearch = router.router.location.state;
-
-  const address = `${addressStateFromSearch.street}, ${addressStateFromSearch.state} ${addressStateFromSearch.postal}`
+  const addressState = router.router.location.state;
 
 
-   React.useEffect(() => {
+
+  React.useEffect(() => {
+    if (addressState == null) {
+      return;
+    }
      const fetchData = async () => {
-     const response = await fetchFunction(address);
-     setRows(await response._embedded.clubs);
+     const response = await fetchFunction(`${!addressState.street}, ${addressState.state} ${addressState.postal}`);
+     setRows(await response._embedded[props.parameter]);
      }
      fetchData();
- }, [address, fetchFunction]);
-
- if (!rows) {
-    return <h5>loading</h5>
- }
+ }, [fetchFunction]);
 
 
   const handleRequestSort = (event, property) => {
@@ -300,6 +294,10 @@ const ClubPage = (props) => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+    if (!rows) {
+      return <h5>loading</h5>
+   }
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -328,6 +326,7 @@ const ClubPage = (props) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
+
                     <TableRow
                       hover
                       onClick={(event) => handleClick(event, row.clubName)}
@@ -383,7 +382,7 @@ const ClubPage = (props) => {
         />
       </Paper>
       <FormControlLabel
-        control={<Button onClick={handleViewClub} />}
+        control={<Button />}
         label="View Club"
       />
       <FormControlLabel
@@ -393,4 +392,4 @@ const ClubPage = (props) => {
     </Box>
   );
 }
-export default withRouter(ClubPage);
+export default withRouter(ResultsPage);

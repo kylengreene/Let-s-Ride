@@ -61,9 +61,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/clubs" >
               <Route index element={<ResultsPage parameter="clubs" />} />
-              <Route path=":id" element={<ClubDetailPage />} >
-                <Route path="admin" element={<ClubAdminPage />} />
-              </Route>
+              <Route path=":id" element={<ClubDetailPage />} />
+              <Route path=":clubId/admin" element={<ClubAdminPage />} />
               <Route path="new" element={<ClubForm />} />
             </Route>
             <Route path="/rides">
