@@ -4,7 +4,8 @@ const baseUrl = process.env.REACT_APP_API_URL, geoCode = new GeoCode();
 
 
 export async function findRidesByAddress(address) {
-   const {lat, lng} = await geoCode.AddressToCoord(address);
+   const geoResponse = await geoCode.fromAddress(address)();
+   const {lat, lng} = geoResponse.results[0].geometry.location
     const init = {
         method: "GET",
         headers: {
@@ -14,8 +15,7 @@ export async function findRidesByAddress(address) {
     }
     const response = await fetch(`${baseUrl}/rides/search/location?lat=${lat}&lng=${lng}`, init);
     if (response.status === 200) {
-        let data =  await response.json();
-        console.log(data);
+        return response.json();
     } else {
         return Promise.reject(response.status);
     }
