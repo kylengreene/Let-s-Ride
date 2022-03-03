@@ -32,8 +32,9 @@ function SearchForm(props) {
 
 
   const handleSubmit = event => {
+
     event.preventDefault();
-    router.router.navigate("/clubs", {
+    router.router.navigate(`/${props.parameter}`, {
       state: {
         street: street,
         state: state,

@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link} from 'react-router-dom';
 import withRouter from '../utility/withRouter';
 
-const pages = ['Clubs', 'Rides'];
+const pages = ['clubs', 'rides'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const NavBar = (props) => {
