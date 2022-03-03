@@ -20,7 +20,7 @@ import Login from "./components/Login";
 import Calendar from "./components/Calendar";
 import ClubDetailPage from "./components/ClubDetailPage";
 import RideDetailPage from "./components/RideDetailPage";
-import Map from "./components/Google-Maps/mapDisplay";
+import Map from "./components/Google-Maps/MapDisplay";
 import GeoCode from "./components/Google-Maps/GeoCode";
 import {useState, useEffect} from 'react';
 import AuthContext from "./context/AuthContext";

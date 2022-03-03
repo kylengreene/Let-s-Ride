@@ -26,6 +26,7 @@ import { findClubsByAddress } from "../api/club";
 import { findRidesByAddress } from "../api/ride-api";
 import AuthContext from "../context/AuthContext";
 import withRouter from '../utility/withRouter';
+import { useNavigate } from 'react-router-dom';
 
 function createData(clubName, clubDescription, clubPostalCode, clubMembershipFee ) {
   return {
@@ -205,19 +206,18 @@ EnhancedTableToolbar.propTypes = {
 };
 
 const ClubPage = (props) => {
-
+  const navigate = useNavigate();
   const router = {...props}
 
   const authContext = React.useContext(AuthContext);
 
-
-  const handleViewClub = null;
 
   const [rows, setRows] = React.useState(null);
 
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('clubMembershipFee');
   const [selected, setSelected] = React.useState([]);
+  const [selectedRow,setSelectedRow]=React.useState(null);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -257,12 +257,13 @@ const ClubPage = (props) => {
     setSelected([]);
   };
 
-  const handleClick = (event, clubName) => {
-    const selectedIndex = selected.indexOf(clubName);
+  const handleClick = (row) => {
+   console.log("digging into id", row.clubId)
+    const selectedIndex = selected.indexOf(row.clubName);
     let newSelected = [];
-
+  
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, clubName);
+      newSelected = newSelected.concat(selected, row.clubName);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -273,11 +274,15 @@ const ClubPage = (props) => {
         selected.slice(selectedIndex + 1),
       );
     }
-
+    setSelectedRow (row, handleClick);
     setSelected(newSelected);
-    console.log("selected club", newSelected);
+    console.log("in if",row);
+  
   };
-
+  const handleViewClub = () =>{
+    console.log("selected row", selectedRow);
+    navigate(`/clubs/${selectedRow.clubId}`);
+  };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -328,12 +333,13 @@ const ClubPage = (props) => {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.clubName)}
+                      onClick={(event) => handleClick(row)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.clubName}
                       selected={isItemSelected}
+                      id= {row.clubId}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
@@ -381,12 +387,8 @@ const ClubPage = (props) => {
         />
       </Paper>
       <FormControlLabel
-        control={<Button onClick={handleViewClub} />}
-        label="View Club"
-      />
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={() =>handleChangeDense()} />}
-        label="Dense padding"
+        control={<Button variant="outlined" type="submit" onClick={handleViewClub} >View Club</Button>}
+      label= ""
       />
     </Box>
   );

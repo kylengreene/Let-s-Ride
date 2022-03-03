@@ -32,7 +32,7 @@ export async function findClubById(clubId) {
 
     const response = await fetch(`${baseUrl}/clubs/${clubId}`, init);
     if (response.status === 200) {
-            return response;
+            return response.json();
     } else if (response.status === 403) {
         return Promise.reject(403);
     }
