@@ -22,7 +22,6 @@ public interface ClubRepository extends JpaRepository<Club, Integer> {
     List<Club> findAllByClubLatAndClubLng(double lat, double lng);
 
     @Override
-    @PreAuthorize("hasAuthority('ROLE_USER')")
     Club save(Club entity);
 
 }

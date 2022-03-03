@@ -29,18 +29,14 @@ public interface RideRepository extends JpaRepository<Ride, Integer> {
     public List<Ride> findAllByRideDatetimeBetween(@DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) Date now, @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) Date weekFromNow);
 
     @Modifying
-    @Query("update Ride r set r.isPending = :pending where r.rideId = :rideId")
+    @Query("update Ride r set r.pending = :pending where r.rideId = :rideId")
     int updateRideSetIsPendingForId(@Param("pending") boolean pending, @Param("rideId") int rideId);
 
     @Query(
-    value = "select * from ride r where r.is_pending = true and r.club_id = :clubId",
+    value = "select * from ride r where r.pending = true and r.club_id = :clubId",
     nativeQuery = true)
     @RestResource(path = "pending", rel = "pending")
     public List<Ride> findAllByIsPending(int clubId);
-
-    @Override
-    @PreAuthorize("hasAnyAuthority('ROLE_MEMBER', 'ROLE_ADMIN')")
-    Ride save(@Param("ride") Ride entity);
 
     @Override
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

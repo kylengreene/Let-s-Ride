@@ -9,6 +9,8 @@ public interface RoleAdminProjection {
     @Value("#{target.getName()}")
     String getApplicationType();
 
+    int getRoleId();
+
     @Value("#{target.getRider().getRiderFirstname()} #{target.getRider().getRiderLastname()}")
     String getRiderFullName();
 
