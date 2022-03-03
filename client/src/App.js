@@ -59,6 +59,7 @@ function App() {
             <Route path="/account" element={<AccountProfile />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
+            <Route path="admin" element={<ClubAdminPage />} />
 
             <Route path="/clubs" >
               <Route index element={<ClubPage parameter="clubs" />} />
