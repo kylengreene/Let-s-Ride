@@ -1,17 +1,12 @@
-import GeoCoding from "../components/Google-Maps/GeoCoding"
 
-const baseUrl = process.env.REACT_APP_API_URL, geoCode = new GeoCoding();
+import GeoCode from "../components/Google-Maps/GeoCode"
 
-export function findClubsByAddress(address) {
-    geoCode.AddressToCoord(address).then(
-        (response)
-    )
+const baseUrl = process.env.REACT_APP_API_URL, geoCode = new GeoCode();
 
-    const geoResponse = await geoCode.AddressToCoord(address);
-    const geoResult  = await geoResponse.json();
-    const {lat, lng} = await geoResult.results[0].geometry.location;
-    console.log(await lat);
-     const init = {
+export async function findClubsByAddress(address) {
+    const geoResponse = await geoCode.fromAddress(address)(); // secondary call for closure
+    const {lat, lng} = geoResponse.results[0].geometry.location;
+    const init = {
          method: "GET",
          headers: {
              "Accept": "application/json",

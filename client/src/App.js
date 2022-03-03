@@ -12,7 +12,7 @@ import HomePage from "./components/HomePage";
 import AccountProfile from "./components/AccountProfile";
 import SignUp from "./components/SignUp";
 import ClubAdminPage from "./components/ClubAdminPage";
-import ClubPage from "./components/ClubPage";
+import ResultsPage from "./components/ResultsPage";
 import ClubForm from "./components/ClubForm";
 import RideForm from "./components/RideForm";
 import SearchForm from "./components/SearchForm";
@@ -21,7 +21,7 @@ import Calendar from "./components/Calendar";
 import ClubDetailPage from "./components/ClubDetailPage";
 import RideDetailPage from "./components/RideDetailPage";
 import Map from "./components/Google-Maps/mapDisplay";
-import GeoCoding from "./components/Google-Maps/GeoCoding";
+import GeoCode from "./components/Google-Maps/GeoCode";
 import {useState, useEffect} from 'react';
 import AuthContext from "./context/AuthContext";
 import {logout, refresh, login} from "./api/login";
@@ -59,19 +59,16 @@ function App() {
             <Route path="/account" element={<AccountProfile />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
-
             <Route path="/clubs" >
-              <Route index element={<ClubPage parameter="clubs" />} />
+              <Route index element={<ResultsPage parameter="clubs" />} />
               <Route path=":id" element={<ClubDetailPage />} >
                 <Route path="admin" element={<ClubAdminPage />} />
               </Route>
               <Route path="new" element={<ClubForm />} />
             </Route>
             <Route path="/rides">
-              <Route index element={<ClubPage parameter="rides" />} />
-              <Route path=":id" element={<RideDetailPage />} >
-                <Route path="admin" element={<ClubAdminPage />} />
-              </Route>
+              <Route index element={<ResultsPage parameter="rides" />} />
+              <Route path=":id" element={<RideDetailPage />} />
               <Route path="new" element={<RideForm />} />
             </Route>
             <Route path="search">
