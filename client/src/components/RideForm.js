@@ -17,6 +17,30 @@ import { findRideById, saveRideData } from "../api/ride-api";
 import AuthContext from "../context/AuthContext";
 import states from 'states-us';
 import withRouter from '../utility/withRouter';
+import CurrencyFormat from 'react-currency-format';
+
+const NumberFormatCustom = React.forwardRef(function CurrencyFormatCustom(props, ref) {
+  const { onChange, ...other } = props;
+
+  return (
+    <CurrencyFormat
+      {...other}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      decimalScale={0}
+      allowNegative={(false)}
+    />
+  );
+});
+
+
+
 
 const emptyRide = {
   rideAddress1: "",
@@ -33,8 +57,38 @@ function RideForm() {
 
   const [ ride, setRide ] = useState(emptyRide);
   const { rideId } = useParams();
+  const [ errors, setErrors ] = useState(emptyRide);
   const theme = createTheme();
   const authContext = useContext(AuthContext);
+
+  const validate = () => {
+    let temp = {}
+
+    temp.rideAddress1 = (!(ride.rideAddress1) ? "This field is required." :
+    ride.rideAddress1.length > 250 ? "Address line 1 cannot be greater than 250 characters." : ""); 
+
+    temp.rideAddress2 = ride.rideAddress2.length > 250 ? "Address line 2 cannot be greater than 250 characters." : ""
+
+    temp.rideCity = (!(ride.rideCity) ? "This field is required." :
+    ride.rideCity.length > 50 ? "City cannot be greater than 50 characters." : "");
+
+    temp.ridePostalCode = (!(ride.ridePostalCode) ? "This field is required." : 
+    isNaN(Number(ride.ridePostalCode)) ? "Invalid field entry." :
+    ride.ridePostalCode.length === 5 ? "" : "Postal code must be 5 digits.");
+
+    temp.rideState = !(ride.rideState) ? "This field is required." : ""
+
+    temp.rideDateTime = !(ride.rideDateTime) ? "This field is required." : ""
+
+    temp.rideDescription = (!(ride.rideDescription) ? "This field is required." :
+    ride.rideDescription.length > 250 ? "Ride description cannot be greater than 250 characters." : "");
+
+    temp.rideLimit = isNaN(Number(ride.rideLimit)) ? "Field entry must be a number." : ""
+
+    setErrors({...temp})
+    console.log({...temp});
+    return Object.values(temp).every(x => x == "")
+  }
 
   const handleErr = useCallback(err => {
     if (err === 403) {
@@ -85,7 +139,11 @@ function RideForm() {
   const [usaState, setUsaState] = useState("");
 
   const handleChange = (event) => {
-    setUsaState(event.target.value);
+    const { name, value } = event.target
+    setRide({
+      ...ride, 
+      [name]: value
+    })
   };
 
 
@@ -116,7 +174,11 @@ function RideForm() {
                   fullWidth
                   id="addressLine1"
                   label="Address Line 1"
-                  name="addressLine1"
+                  name="rideAddress1"
+                  value={ride.rideAddress1}
+                  onChange={handleChange}
+                  error={Boolean(errors?.rideAddress1)}
+                  helperText={(errors?.rideAddress1)}
 
                 />
               </Grid>
@@ -126,7 +188,11 @@ function RideForm() {
                   fullWidth
                   id="addressLine2"
                   label="Address Line 2"
-                  name="addressLine2"
+                  name="rideAddress2"
+                  value={ride.rideAddress2}
+                  onChange={handleChange}
+                  error={Boolean(errors?.rideAddress2)}
+                  helperText={(errors?.rideAddress2)}
 
                 />
               </Grid>
@@ -137,7 +203,11 @@ function RideForm() {
                   fullWidth
                   id="city"
                   label="City"
-                  name="city"
+                  name="rideCity"
+                  value={ride.rideCity}
+                  onChange={handleChange}
+                  error={Boolean(errors?.rideCity)}
+                  helperText={(errors?.rideCity)}
 
                 />
               </Grid>
@@ -146,11 +216,16 @@ function RideForm() {
 
                   required
                   fullWidth
-                  type="number"
                   id="postal-code"
                   label="Postal Code"
-                  name="postal"
-
+                  name="ridePostalCode"
+                  value={ride.ridePostalCode}
+                  onChange={handleChange}
+                  error={Boolean(errors?.ridePostalCode)}
+                  helperText={(errors?.ridePostalCode)}
+                  InputProps={{
+                    inputComponent: NumberFormatCustom,
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -161,8 +236,11 @@ function RideForm() {
                   fullWidth
                   id="state"
                   label="State"
-                  value={usaState}
+                  name="rideState"
+                  value={ride.rideState}
                   onChange={handleChange}
+                  error={Boolean(errors?.rideState)}
+                  helperText={(errors?.rideState)}
 
                   >
 
@@ -179,29 +257,47 @@ function RideForm() {
                   required
                   fullWidth
                   type="datetime-local"
-                  name="date"
+                  name="rideDateTime"
                   label="Date/Time"
                   id="date"
+                  InputLabelProps={{ shrink: true }}
+                  value={ride.rideDateTime}
+                  onChange={handleChange}
+                  error={Boolean(errors?.rideDateTime)}
+                  helperText={(errors?.rideDateTime)}
                 />
               </Grid>
+              <Grid item xs={12}> 
+
+              </Grid>             
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  name="description"
+                  name="rideDescription"
                   id="description"
                   label="Ride Description"
                   multiline
                   rows={4}
+                  value={ride.rideDescription}
+                  onChange={handleChange}
+                  error={Boolean(errors?.rideDescription)}
+                  helperText={(errors?.rideDescription)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  type="number"
                   fullWidth
-                  name="limit"
+                  name="rideLimit"
                   label="Ride limit"
                   id="limit"
+                  value={ride.rideLimit}
+                  onChange={handleChange}
+                  error={Boolean(errors?.rideLimit)}
+                  helperText={(errors?.rideLimit)}
+                  InputProps={{
+                    inputComponent: NumberFormatCustom,
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
