@@ -138,7 +138,8 @@ const NavBar = (props) => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={() => router.router.navigate(`/${setting}`)}>
+                <MenuItem key={setting} onClick={() => {
+                  setting === "Signout" ? authContext.logout() : router.router.navigate(`/${setting}`)}}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
