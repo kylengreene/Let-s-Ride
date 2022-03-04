@@ -11,6 +11,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import withRouter from '../utility/withRouter';
+import AuthContext from '../context/AuthContext';
+import {findRideById} from "../api/ride-api";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -20,21 +22,36 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
   }));
 
-const ride = {
-    rideAddress1: "travis street",
-    rideAddress2: "apt 434",
-    rideCity: "austin",
-    ridePostalCode: "12345",
-    rideState: "texas",
-    rideDateTime: "12AM",
-    rideDescription: "fun ride in the sun",
-    rideLimit: "",
-    rideClub: "Sunrides",
-    rideClubId: "1"
-};
+function RideDetailPage (props) {
 
-function RideDetailPage () {
+    const router = {...props};
     const theme = createTheme();
+
+    const {id} = useParams();
+
+    const authContext = React.useContext(AuthContext);
+
+    const [ride, setRide] = React.useState(null);
+
+    const handleErr = React.useCallback(err => {
+        if (err === 403) {
+          authContext.logout();
+          err = "Unauthorized";
+        }
+      }, [authContext]);
+
+      React.useEffect(() => {
+        const fetchRide = async () => {
+          const response = await findRideById(id);
+          setRide(response);
+        }
+        fetchRide();
+      }, [id, handleErr]);
+
+
+      if (!ride) {
+        return <h5>loading</h5>
+      }
 
     return (
         <ThemeProvider theme={theme}>
@@ -49,8 +66,9 @@ function RideDetailPage () {
           }}
         >
         <Typography component="h1" variant="h5" sx={{ border:1, p:2}}>
-            Ride Detail Page
+            Ride Details
         </Typography>
+        {console.log(ride)}
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2} sx={{ mt:16 }}>
                 <Grid item xs={4}>
@@ -63,37 +81,25 @@ function RideDetailPage () {
                     Address Line 1:
                 </Grid>
                 <Grid item xs={8}>
-                    <Item> {ride.rideAddress1} </Item>
-                </Grid>
-                <Grid item xs={4}>
-                    Address Line 2:
-                </Grid>
-                <Grid item xs={8}>
-                    <Item> {ride.rideAddress2 ? ride.rideAddress2 : "NA"} </Item>
+                    <Item> {ride.rideStreet.short_name} </Item>
                 </Grid>
                 <Grid item xs={4}>
                     City:
                 </Grid>
                 <Grid item xs={8}>
-                    <Item> {ride.rideCity} </Item>
+                    <Item> {ride.rideCity.short_name} </Item>
                 </Grid>
                 <Grid item xs={4}>
                     State:
                 </Grid>
                 <Grid item xs={8}>
-                    <Item> {ride.rideState} </Item>
-                </Grid>
-                <Grid item xs={4}>
-                    Postal Code:
-                </Grid>
-                <Grid item xs={8}>
-                    <Item> {ride.ridePostalCode} </Item>
+                    <Item> {ride.rideState.short_name} </Item>
                 </Grid>
                 <Grid item xs={4}>
                     Date:
                 </Grid>
                 <Grid item xs={8}>
-                    <Item> {ride.rideDateTime} </Item>
+                    <Item> {ride.rideDatetime} </Item>
                 </Grid>
                 <Grid item xs={4}>
                     Rider Limit:
@@ -105,11 +111,11 @@ function RideDetailPage () {
                     Club Sponsoring:
                 </Grid>
                 <Grid item xs={6}>
-                    <Item> {ride.rideClub} </Item>
+                    <Item> {ride.clubName} </Item>
                 </Grid>
                 <Grid item xs={2}>
                     <Button
-                    href="http://localhost:3000/club/{rideClubId}"
+                    onClick={() => router.router.navigate(`/clubs/${ride.clubId}`)}
                     id="clubPageBtn"
                     fullWidth
                     variant="contained"

@@ -92,6 +92,7 @@ export async function declineSelectedRides(listOfRides) {
             method: "DELETE",
             headers: {
                 "Accept": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
                 "Content-Type": "application/json"
             }
         }
@@ -107,6 +108,7 @@ export async function declineSelectedRiders(listOfRiders) {
             method: "DELETE",
             headers: {
                 "Accept": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
                 "Content-Type": "application/json"
             }
         }

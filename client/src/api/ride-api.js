@@ -15,7 +15,16 @@ export async function findRidesByAddress(address) {
     }
     const response = await fetch(`${baseUrl}/rides/search/location?lat=${lat}&lng=${lng}`, init);
     if (response.status === 200) {
-        return response.json();
+        const data = await response.json();
+        const rides = data._embedded.rides;
+
+        for (let ride of rides) {
+            const humanTime = new Date(Date.parse(ride.rideDatetime)).toLocaleString();
+            ride.rideDatetime = humanTime;
+        }
+
+        return rides;
+
     } else {
         return Promise.reject(response.status);
     }
@@ -47,7 +56,21 @@ export async function findRideById(rideId) {
         "Accept": "application/json"
     }};
 
-    const response = await fetch(`${baseUrl}/rides/${rideId}`, init);
+    const response = await fetch(`${baseUrl}/rides/${rideId}?projection=details`, init);
+    if (response.status === 200) {
+
+
+        const data = await response.json();
+        const geoResponse = await geoCode.fromLatLng(data.rideLat, data.rideLng)();
+        const addressComp = geoResponse.results[0].address_components;
+        data.rideCity = addressComp.filter(obj => obj.types.includes("locality"))[0];
+        data.rideState = addressComp.filter(obj => obj.types.includes("administrative_area_level_1"))[0];
+        data.rideStreet = addressComp.filter(obj=> obj.types.includes("route"))[0];
+        return data;
+
+
+
+}
 
     if (response.status === 200) {
         return response.json();
@@ -121,3 +144,9 @@ function addDays(date, days) {
     result.setDate(result.getDate() + days);
     return result;
   }
+
+export async function findAllNotPending(address) {
+    const rides = await  findRidesByAddress(address);
+    return rides.filter(r => !r.pending);
+
+}

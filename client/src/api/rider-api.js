@@ -33,7 +33,7 @@ export async function retrieveRider(username) {
     }
     const response = await fetch(`${baseUrl}/riders/search/user?username=${username}`, init)
     if (response.status === 200) {
-        return response;
+        return await response.json();
 
     } else if (response.status === 403) {
         return Promise.reject(403);
@@ -56,4 +56,28 @@ async function getClubsForRider(data) {
         const clubData = response["_embedded"].clubs;
         return clubData;
     }
+}
+
+export async function addAdminRole(username, clubId) {
+   const resp = await retrieveRider(username);
+   let body = {
+    rider: `http://localhost:8080/api/riders/${resp.riderId}`,
+    club: `http://localhost:8080/api/clubs/${clubId}`,
+    name: "ADMIN",
+    pending: false
+}
+
+   const init = {
+       method: "POST",
+       headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+       },
+       body: JSON.stringify(body)
+
+   }
+
+    const response = await fetch(`${baseUrl}/roles`, init);
+    return response.json();
+
 }

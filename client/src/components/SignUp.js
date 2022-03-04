@@ -30,8 +30,9 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-const SignUp =()=> {
+const SignUp = (props) => {
 
+  const router = {...props};
 
 
   const handleSubmit = async (event) => {
@@ -45,7 +46,12 @@ const SignUp =()=> {
       "username": data.get("username"),
       "password": data.get("password")
     };
-    createRider(rider);
+    const response = await createRider(rider);
+    if (response.status === 201) {
+      router.router.navigate("/login", {state: {
+        username: response.data.username
+      }})
+    }
   };
 
   return (

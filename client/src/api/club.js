@@ -1,5 +1,7 @@
 
+import { geocode } from "@googlemaps/google-maps-services-js/dist/geocode/geocode";
 import GeoCode from "../components/Google-Maps/GeoCode"
+import { addAdminRole } from "./rider-api";
 
 const baseUrl = process.env.REACT_APP_API_URL, geoCode = new GeoCode();
 
@@ -31,15 +33,23 @@ export async function findClubById(clubId) {
 
     const response = await fetch(`${baseUrl}/clubs/${clubId}`, init);
     if (response.status === 200) {
-            return response.json();
+
+
+            const data = await response.json();
+            const geoResponse = await geoCode.fromLatLng(data.clubLat, data.clubLng)();
+            const addressComp = geoResponse.results[0].address_components;
+
+            data.clubCity = addressComp.filter(obj => obj.types.includes("locality"))[0];
+            data.clubState = addressComp.filter(obj => obj.types.includes("administrative_area_level_1"))[0];
+            data.clubPostalCode = addressComp.filter(obj=> obj.types.includes("route"))[0];
+            return data;
+
+
+
     } else if (response.status === 403) {
         return Promise.reject(403);
     }
     return Promise.reject("Could not fetch club.");
-}
-
-export async function saveClubData(club) {
-    return club.clubId > 0 ? updateClub(club) : addClub(club);
 }
 
 async function updateClub(club) {
@@ -61,7 +71,13 @@ async function updateClub(club) {
     return Promise.reject("Club ID's cannot be changed");
 }
 
-async function addClub(club) {
+export async function addClub(club) {
+
+    const geoResponse = await geoCode.fromAddress(club.clubPostalCode)();
+    const {lat,lng} = geoResponse.results[0].geometry.location;
+    club.clubLat = lat;
+    club.clubLng = lng;
+
     const init = { method: "POST", headers: {
         "Authorization": `Bearer ${localStorage.getItem("TOKEN")}`,
         "Content-Type": "application/json",
@@ -72,7 +88,7 @@ async function addClub(club) {
 
     const response = await fetch(`${baseUrl}/clubs`, init);
     if (response.status === 201) {
-        return response.json();
+        return await response.json();
     } else if (response.status === 403) {
         return Promise.reject(403);
     }

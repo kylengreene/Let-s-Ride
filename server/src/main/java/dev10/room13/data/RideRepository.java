@@ -38,16 +38,22 @@ public interface RideRepository extends JpaRepository<Ride, Integer> {
     @RestResource(path = "pending", rel = "pending")
     public List<Ride> findAllByIsPending(int clubId);
 
+       @Query(
+        value = "select * from ride r where r.pending = false and r.rideId not in :list",
+        nativeQuery = true)
+        @RestResource(path="notPending", rel="notPending")
+        public List<Ride> findAllByNotPending(@Param("list") List<Ride> notPendingRides);
+
     @Override
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    void delete(Ride entity);
+    @PreAuthorize("hasAuthority('ROLE_ADMIN_' + #ride.getClub().getClubId())")
+    void delete(@Param("ride") Ride entity);
 
     @Override
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     void deleteAll();
 
     @Override
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN_)")
     void deleteById(Integer id);
 
 }

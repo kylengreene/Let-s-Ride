@@ -23,13 +23,14 @@ import { visuallyHidden } from '@mui/utils';
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import { findClubsByAddress } from "../api/club";
-import { findRidesByAddress } from "../api/ride-api";
+import { findAllNotPending } from "../api/ride-api";
 import AuthContext from "../context/AuthContext";
 import withRouter from '../utility/withRouter';
 import SearchForm from './SearchForm'
 
-function createData(clubName, clubDescription, clubPostalCode, clubMembershipFee ) {
+function createData(clubId, clubName, clubDescription, clubPostalCode, clubMembershipFee ) {
   return {
+    clubId,
     clubName,
     clubDescription,
     clubPostalCode,
@@ -66,9 +67,9 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
+const headCellsClub = [
   {
-    id: 'clubName',
+    id: "clubName",
     numeric: false,
     disablePadding: true,
     label: 'Club',
@@ -94,7 +95,29 @@ const headCells = [
 
 ];
 
+const headCellsRide = [
+  {
+    id: "rideDatetime",
+    numeric: false,
+    disablePadding: true,
+    label: 'Ride Date',
+  },
+  {
+    id: 'rideDescription',
+    numeric: false,
+    disablePadding: false,
+    label: 'Description',
+  },
+  {
+    id: 'rideLimit',
+    numeric: true,
+    disablePadding: false,
+    label: 'Max Attendance',
+  }
+];
+
 function EnhancedTableHead(props) {
+  const headCells = props.parameter === "clubs" ? headCellsClub : headCellsRide;
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
@@ -180,7 +203,7 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Clubs
+          {props.parameter}
         </Typography>
       )}
 
@@ -220,7 +243,7 @@ const ResultsPage = (props) => {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const fetchFunction = props.parameter === "clubs" ? findClubsByAddress : findRidesByAddress;
+  const fetchFunction = props.parameter === "clubs" ? findClubsByAddress : findAllNotPending;
 
   const addressState = router.router.location.state;
 
@@ -232,7 +255,7 @@ const ResultsPage = (props) => {
     }
      const fetchData = async () => {
      const response = await fetchFunction(`${!addressState.street}, ${addressState.state} ${addressState.postal}`);
-     setRows(await response._embedded[props.parameter]);
+     setRows(props.parameter === "clubs" ? await response._embedded[props.parameter] : response);
      }
      fetchData();
  }, [fetchFunction]);
@@ -253,25 +276,12 @@ const ResultsPage = (props) => {
     setSelected([]);
   };
 
-  const handleClick = (event, clubName) => {
-    const selectedIndex = selected.indexOf(clubName);
-    let newSelected = [];
+  const handleView = () =>{
+    router.router.navigate(`/${props.parameter}/${props.parameter === "clubs" ? selected : selected}`);
+  };
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, clubName);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
-    console.log("selected club", newSelected);
+  const handleClick = (id) => {
+    setSelected([id]);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -288,7 +298,7 @@ const ResultsPage = (props) => {
     setDense(event.target.checked);
   };
 
-  const isSelected = (clubName) => selected.indexOf(clubName) !== -1;
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -309,12 +319,14 @@ const ResultsPage = (props) => {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
+              parameter={props.parameter}
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
+              onSelectAllClick={(e) => e.target.disabled = true}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
+              parameter={props.parameter}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
@@ -322,18 +334,18 @@ const ResultsPage = (props) => {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.clubName);
+                  const isItemSelected = isSelected(props.parameter === "clubs" ? row.clubId: row.rideId);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
 
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.clubName)}
+                      onClick={() => handleClick(props.parameter === "clubs" ? row.clubId : row.rideId)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.clubName}
+                      key={props.parameter === "clubs" ? row.clubId : row.rideId}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -351,11 +363,13 @@ const ResultsPage = (props) => {
                         scope="row"
                         padding="none"
                       >
-                        {row.clubName}
+                        {props.parameter === "clubs" ? row.clubName : row.rideDatetime}
                       </TableCell>
-                      <TableCell align="right">{row.clubDescription}</TableCell>
-                      <TableCell align="right">{row.clubPostalCode}</TableCell>
-                      <TableCell align="right">{row.clubMembershipFee}</TableCell>
+                      <TableCell align="left">{props.parameter === "clubs" ? row.clubDescription : row.rideDescription}</TableCell>
+                      <TableCell align="right">{props.parameter === "clubs" ? row.clubPostalCode : row.rideLimit}</TableCell>
+                      {props.parameter === "clubs" ?
+                      <TableCell align="right">{row.clubMembershipFee}</TableCell> : null
+                      }
                     </TableRow>
                   );
                 })}
@@ -383,13 +397,19 @@ const ResultsPage = (props) => {
       </Paper>
       <FormControlLabel
         control={<Button />}
-        label="View Club"
+        label="View Details"
+        onClick={handleView}
       />
       <FormControlLabel
         control={<Switch checked={dense} onChange={() =>handleChangeDense()} />}
         label="Dense padding"
       />
-    </Box>
+      <FormControlLabel
+      control={<Button />}
+      onClick={() => router.router.navigate(`/${props.parameter}/new`)}
+      label={`New ${props.parameter.substr(0, 4)}`}
+      />
+          </Box>
   );
 }
 export default withRouter(ResultsPage);

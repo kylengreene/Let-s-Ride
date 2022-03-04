@@ -16,7 +16,7 @@ import {login} from "../api/login.js";
 import {useContext, useState} from 'react';
 import AuthContext from '../context/AuthContext.js';
 import withRouter from '../utility/withRouter';
-import { useNavigate, Router } from 'react-router-dom';
+
 
 function Copyright(props) {
   return (
@@ -33,14 +33,15 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-const Login = () => {
+const Login = (props) => {
+
+  const router = {...props};
+
   const [candidate, setCandidate] = useState({
     username: "",
     password: ""
 });
 const [hasError, setHasError] = useState(false);
-
-const navigate = useNavigate();
 
 const authContext = useContext(AuthContext);
 
@@ -55,7 +56,7 @@ const handleSubmit = async (event) => {
     login(candidate)
         .then(principal => {
             authContext.login(principal);
-            navigate("/account");
+            router.router.navigate("/");
         }).catch(() => setHasError(true));
   }
 

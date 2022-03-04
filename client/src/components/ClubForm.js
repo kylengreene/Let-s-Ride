@@ -13,10 +13,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { findClubById, saveClubData } from "../api/club";
+import { findClubById, addClub} from "../api/club";
 import AuthContext from "../context/AuthContext";
 import CurrencyFormat from 'react-currency-format';
-// import withRouter from "react-router-dom"
+import withRouter from "../utility/withRouter"
+import { addAdminRole } from '../api/rider-api';
+
+
 const CurrencyFormatCustom = React.forwardRef(function CurrencyFormatCustom(props, ref) {
   const { onChange, ...other } = props;
 
@@ -34,7 +37,7 @@ const CurrencyFormatCustom = React.forwardRef(function CurrencyFormatCustom(prop
       thousandSeparator
       prefix="$"
       decimalScale={2}
-      
+
       allowNegative={(false)}
     />
   );
@@ -72,7 +75,8 @@ const emptyClub = {
   clubMembershipFee: ""
 };
 
-function ClubForm() {
+function ClubForm(props) {
+  const router = {...props};
 
   const [ club, setClub ] = useState(emptyClub);
   const { clubId } = useParams();
@@ -84,12 +88,12 @@ function ClubForm() {
     let temp = {}
 
     temp.clubName = (!(club.clubName) ? "This field is required." :
-    club.clubName.length > 50 ? "Club name cannot be greater than 50 characters." : ""); 
+    club.clubName.length > 50 ? "Club name cannot be greater than 50 characters." : "");
 
     temp.clubDescription = (!(club.clubDescription) ? "This field is required." :
     club.clubDescription.length > 250 ? "Club description cannot be greater than 250 characters." : "");
 
-    temp.clubPostalCode = (!(club.clubPostalCode) ? "This field is required." : 
+    temp.clubPostalCode = (!(club.clubPostalCode) ? "This field is required." :
     isNaN(Number(club.clubPostalCode)) ? "Postal code must be 5 digits." :
     club.clubPostalCode.length === 5 ? "" : "Invalid postal code length.");
 
@@ -139,11 +143,15 @@ function ClubForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if(validate()) {
-      console.log(club);
+      const response = await addClub(club);
+      const resp = await addAdminRole(authContext.credentials.username, response.clubId);
+      authContext.credentials.authorities.push(`ROLE_ADMIN_${response.clubId}`);
+
+      router.router.navigate(`/clubs/${response.clubId}`);
       // saveClubData(club)
       //   .then(() => history.push("/"))
       //   .catch(handleErr);
-    } 
+    }
   };
 
   return (
@@ -254,4 +262,4 @@ function ClubForm() {
     </ThemeProvider>
   );
 }
-export default (ClubForm);
+export default withRouter(ClubForm);
